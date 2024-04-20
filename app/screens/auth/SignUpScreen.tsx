@@ -31,7 +31,7 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
             </AppText>
 
             <AppText fontWeight='Light' style={{ color: Colors.hintTextColor, marginLeft: 10, fontSize: 16 }}>
-              Enter your email and password below
+              Fill out your details below
             </AppText>
           </View>
 
@@ -74,7 +74,7 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
           </View>
 
           <AppButton
-            onPress={() => navigate('Home')}
+            onPress={() => navigate('HomeDrawer')}
             buttonText="Continue"
             showNext={false}
           />
@@ -94,19 +94,15 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
 
           </View>
 
-          <View style={styles.terms}>
+          <AppText style={styles.bottomText}>
+            By tapping Continue, you agree to our
 
-            <AppText style={styles.policy}>
-              By tapping Continue, you agree to our
-            </AppText>
+            <AppText fontWeight='Medium' style={styles.policy}>Terms</AppText>
 
-            <AppText>Terms</AppText>
+            <AppText>&</AppText>
 
-            <AppText style={styles.policy}>&</AppText>
-
-            <AppText>Privacy policy</AppText>
-
-          </View>
+            <AppText fontWeight='Medium' style={styles.policy} >Privacy </AppText>
+          </AppText>
 
         </View>
       </CustomScrollView>
@@ -152,22 +148,20 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: 16.5,
     padding: 4,
-
   },
 
-  terms: {
+  bottomText: {
+    fontSize: 13,
+    color: Colors.hintTextColor,
+    textAlign: "center",
     marginTop: 20,
     marginBottom: 30,
-    justifyContent: "center",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: -2,
-
+    paddingHorizontal: 20,
   },
 
   policy: {
-    fontSize: 13,
-    color: Colors.hintTextColor
-  }
+    color: Colors.textColor1,
+    fontSize: 14
+  },
 
 })

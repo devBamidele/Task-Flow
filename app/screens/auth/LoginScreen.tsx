@@ -20,9 +20,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                 <View style={[styles.mainView, { paddingHorizontal: 10 }]}>
 
                     <View style={styles.backButton}>
-                        <Pressable
-                            onPress={goBack}
-                        >
+                        <Pressable onPress={goBack} >
                             <Ionicons
                                 size={28}
                                 name={"arrow-back-outline"}
@@ -71,7 +69,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                     </View>
 
                     <AppButton
-                        onPress={() => navigate('Home')}
+                        onPress={() => navigate('HomeDrawer')}
                         buttonText="Continue"
                         showNext={false}
                     />

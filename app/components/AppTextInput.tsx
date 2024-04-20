@@ -6,18 +6,18 @@ import { customIconNames } from '../utils/types';
 
 interface AppTextInputProps extends TextInputProps {
     text: string;
-    setText: React.Dispatch<React.SetStateAction<string>>;
-    iconName?: customIconNames;
     iconSize?: number
+    iconName?: customIconNames;
+    setText: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AppTextInput: FC<AppTextInputProps> = ({
-        iconSize,
-        text,
-        setText,
-        iconName,
-        ...otherProps
-    }) => {
+    iconSize,
+    text,
+    setText,
+    iconName,
+    ...otherProps
+}) => {
 
     const [focused, setFocused] = useState<boolean>(false);
 
@@ -62,7 +62,9 @@ export default AppTextInput;
 const styles = StyleSheet.create({
 
     focusedTextField: {
-        elevation: 3,
+        borderWidth: 0.8,
+        
+        borderColor: Colors.primary,
         shadowColor: Colors.textColor1,
         backgroundColor: Colors.activeInput,
     },

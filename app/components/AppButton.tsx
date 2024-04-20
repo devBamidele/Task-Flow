@@ -10,16 +10,17 @@ interface AppButtonProps {
     onPress?: onPress;
     buttonText: string;
     showNext?: boolean;
+    shadow?: number;
 }
 
-const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = true }) => {
+const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = true, shadow = 20 }) => {
     return (
         <View style={styles.buttonView}>
 
             <TouchableOpacity
                 onPress={onPress}
                 activeOpacity={0.6}
-                style={styles.button}>
+                style={[styles.button, { elevation: shadow } ]}>
 
                 <View style={styles.shrinkBox} />
 
@@ -59,7 +60,6 @@ const styles = StyleSheet.create({
         borderRadius: 14,
 
         shadowColor: Colors.primary,
-        elevation: 20,
 
         //iOS
         shadowOffset: { width: 0, height: 8 },
