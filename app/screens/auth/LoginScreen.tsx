@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { FC, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LoginScreenProps } from '@/app/utils/types'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -8,21 +8,25 @@ import Colors from '@/app/utils/colors'
 import AppText from '@/app/components/AppText'
 import AppTextInput from '@/app/components/AppTextInput';
 import AppButton from '@/app/components/AppButton';
+import { horizontalScale, verticalScale } from '@/app/utils/metric';
+import { TextInput } from 'react-native-gesture-handler';
 
 const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } }) => {
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
+    const passwordInputRef = useRef<TextInput>(null);
+
     return (
         <SafeAreaView style={styles.mainView}>
             <CustomScrollView>
-                <View style={[styles.mainView, { paddingHorizontal: 10 }]}>
+                <View style={[styles.mainView, { paddingHorizontal: 8 }]}>
 
                     <View style={styles.backButton}>
                         <Pressable onPress={goBack} >
                             <Ionicons
-                                size={28}
+                                size={26}
                                 name={"arrow-back-outline"}
                                 color={Colors.textColor1}
                                 style={{ padding: 6 }}
@@ -35,9 +39,13 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                             fontWeight='Medium'
                             numberOfLines={2}
                             style={styles.headerText}
-                        >Login to your account</AppText>
+                        >Log In</AppText>
 
-                        <AppText fontWeight='Light' style={{ color: Colors.hintTextColor, marginLeft: 10 }}>Enter your email and password below</AppText>
+                        <AppText
+                            fontWeight='Light'
+                            style={[styles.secondaryText, { marginLeft: 10 }]}
+                        >Enter your email and password below</AppText>
+
                     </View>
 
                     <View style={styles.textInputView}>
@@ -45,8 +53,11 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                         <AppTextInput
                             placeholder="Email"
                             text={email}
+                            keyboardType="email-address"
                             setText={setEmail}
                             iconName='mail-outline'
+                            returnKeyType='next'
+                            onSubmitEditing={() => passwordInputRef.current?.focus()}
                         />
 
                         <AppTextInput
@@ -54,10 +65,10 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                             placeholder="Password"
                             text={password}
                             setText={setPassword}
-                            secureTextEntry
+                            isPassword={true}
                             iconName='lock-closed-outline'
+                            forwardedRef={passwordInputRef}
                         />
-
                     </View>
 
                     <View style={{ alignSelf: 'flex-end', marginRight: 4 }}>
@@ -71,11 +82,10 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                     <AppButton
                         onPress={() => navigate('HomeDrawer')}
                         buttonText="Continue"
-                        showNext={false}
                     />
 
                     <View style={styles.signView}>
-                        <AppText fontWeight='Light' style={{ color: Colors.hintTextColor, fontSize: 15.5 }}>
+                        <AppText fontWeight='Light' style={styles.secondaryText}>
                             Don't have an account ?
                         </AppText>
 
@@ -135,8 +145,8 @@ const styles = StyleSheet.create({
     },
 
     backButton: {
-        marginTop: 25,
-        marginLeft: 8,
+        marginTop: verticalScale(10),
+        marginLeft: horizontalScale(2),
         alignSelf: "flex-start",
     },
 
@@ -147,19 +157,14 @@ const styles = StyleSheet.create({
     },
 
     loginTextView: {
-        marginTop: 60,
-        marginBottom: 60,
+        marginTop: verticalScale(52),
+        marginBottom: verticalScale(50),
     },
 
     textInputView: {
         paddingHorizontal: 10,
-        gap: 20,
+        gap: 18,
         marginBottom: 6,
-    },
-
-    emailIcon: {
-        alignItems: "center",
-        padding: 10,
     },
 
     forgotPassword: {
@@ -171,10 +176,6 @@ const styles = StyleSheet.create({
         paddingVertical: 8
     },
 
-    buttonText: {
-        alignSelf: "center",
-        marginVertical: 15,
-    },
 
     signView: {
         justifyContent: "center",
@@ -186,9 +187,8 @@ const styles = StyleSheet.create({
 
     signUpText: {
         color: Colors.primary,
-        fontSize: 16.5,
+        fontSize: 15.5,
         padding: 4,
-
     },
 
     separator: {
@@ -196,12 +196,18 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         alignSelf: "center",
         flex: 1
-
     },
 
     continueView: {
         flexDirection: "row",
         marginHorizontal: 32,
-        paddingVertical: 18
+        paddingBottom: verticalScale(12),
+        paddingTop: verticalScale(17)
+    },
+
+
+    secondaryText: {
+        color: Colors.hintTextColor,
+        fontSize: 14.5
     }
 })

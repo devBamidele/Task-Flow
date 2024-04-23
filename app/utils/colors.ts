@@ -4,12 +4,15 @@ const Colors = {
 
     textColor1: '#24252C',
     textColor2: '#6E6A7C',
+    textColor3: '#7C7C7C',
 
     primary: '#5F33E1',
     hintTextColor: '#9E9E9E',
     inActiveInput: '#FAFAFA',
     activeInput: '#F1EDFC',
     divider : '#D6D6D6',
+
+    selectionColor : '#C2C2C2',
 
     gray : "#616161",
 }

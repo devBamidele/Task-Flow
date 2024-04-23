@@ -1,17 +1,15 @@
-import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { FC, useState } from 'react'
+import { Pressable, StyleSheet, View } from 'react-native'
+import React, { FC } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomScrollView from '@/app/components/AppScrollView'
 import Colors from '@/app/utils/colors'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TodayScreenProps } from '@/app/utils/types'
 import AppText from '@/app/components/AppText'
-import AppTextInput from '@/app/components/AppTextInput'
+import AddTaskButton from '@/app/components/AddTaskButton'
 
 
-const TodayScreen: FC<TodayScreenProps> = ({ navigation }) => {
-
-    const [task, settask] = useState<string>('')
+const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigate } }) => {
 
     return (
         <SafeAreaView style={styles.mainView}>
@@ -19,9 +17,9 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation }) => {
                 <View style={[styles.mainView, { paddingHorizontal: 10 }]} >
 
                     <View style={styles.backButton}>
-                        <Pressable onPress={() => navigation.toggleDrawer()} >
+                        <Pressable onPress={toggleDrawer} >
                             <Ionicons
-                                size={30}
+                                size={28}
                                 name={"menu-outline"}
                                 color={Colors.textColor1}
                                 style={{ padding: 6 }}
@@ -33,25 +31,18 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation }) => {
                                 Today
                             </AppText>
 
-                            <TouchableOpacity activeOpacity={0.6} style={styles.googleButton}>
-                                <AppText style={{ fontSize: 17 }}>
+                            <View style={styles.undoneCount}>
+                                <AppText style={{ fontSize: 15 }}>
                                     5
                                 </AppText>
-                            </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
 
 
-                    <View style={{paddingHorizontal: 14, marginTop: 32}}>
-                        <AppTextInput
-                            placeholder="Add New Task"
-                            text={task}
-                            setText={settask}
-                            iconName='add-outline'
-                        />
+                    <View style={{ paddingHorizontal: 14, marginTop: 28 }}>
+                        <AddTaskButton onPress={() => navigate('Task')} buttonText='Add New Task' />
                     </View>
-
-
 
                 </View>
             </CustomScrollView>
@@ -74,17 +65,17 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
 
-    googleButton: {
+    undoneCount: {
         borderColor: Colors.divider,
         borderWidth: 1,
-        paddingHorizontal: 7,
-        paddingVertical: 5,
+        paddingHorizontal: 5,
+        paddingVertical: 3,
         borderRadius: 8,
-        marginLeft: 7
+        marginLeft: 4
     },
 
     headerText: {
-        fontSize: 29,
+        fontSize: 27,
         marginLeft: 5,
     }
 

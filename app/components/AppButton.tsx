@@ -1,37 +1,49 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleProp, StyleSheet, TouchableOpacity, View, ViewProps, ViewStyle } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { FC } from 'react'
 import Colors from '../utils/colors'
 import AppText from './AppText'
+import { moderateScale, verticalScale } from '../utils/metric';
 
 type onPress = () => void;
 
-interface AppButtonProps {
+interface AppButtonProps extends ViewProps {
     onPress?: onPress;
     buttonText: string;
     showNext?: boolean;
     shadow?: number;
+    isLoading?: boolean;
 }
 
-const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = true, shadow = 20 }) => {
+const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = false, shadow = 20, isLoading, ...otherProps }) => {
     return (
-        <View style={styles.buttonView}>
-
+        <View
+            {...otherProps}
+            style={styles.buttonView}
+        >
             <TouchableOpacity
+                disabled={isLoading}
                 onPress={onPress}
                 activeOpacity={0.6}
-                style={[styles.button, { elevation: shadow } ]}>
+                style={[styles.button, { elevation: shadow }]}>
 
                 <View style={styles.shrinkBox} />
 
-                <AppText
-                    fontWeight='SemiBold'
-                    style={styles.buttonText}>
-                    {buttonText}
-                </AppText>
+                {
+                    isLoading ?
+                        <ActivityIndicator
+                            color={Colors.white}
+                            size={moderateScale(22)}
+                        /> :
+                        <AppText
+                            fontWeight='SemiBold'
+                            style={styles.buttonText}>
+                            {buttonText}
+                        </AppText>
+                }
 
                 {showNext ? <Ionicons
-                    size={26}
+                    size={20}
                     name={"arrow-forward-outline"}
                     color={Colors.white} /> : <View style={styles.shrinkBox} />}
 
@@ -47,17 +59,18 @@ const styles = StyleSheet.create({
         paddingBottom: 24,
         paddingHorizontal: 20,
         width: "100%",
-        marginTop: 50,
+        marginTop: verticalScale(40),
     },
 
     button: {
         flexDirection: 'row',
         justifyContent: "space-between",
 
-        paddingVertical: 14,
+        paddingVertical: verticalScale(11.5),
         paddingHorizontal: 16,
         backgroundColor: Colors.primary,
-        borderRadius: 14,
+        borderRadius: 10,
+        alignItems: "center",
 
         shadowColor: Colors.primary,
 

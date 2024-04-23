@@ -1,6 +1,7 @@
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+// Base Stack
 type BaseStackParamList = {
   Welcome: undefined;
   Login: undefined;
@@ -11,7 +12,6 @@ type BaseStackParamList = {
 type WelcomeScreenProps = NativeStackScreenProps<BaseStackParamList, "Welcome">;
 type LoginScreenProps = NativeStackScreenProps<BaseStackParamList, "Login">;
 type SignUpScreenProps = NativeStackScreenProps<BaseStackParamList, "SignUp">;
-type HomeScreenProps = NativeStackScreenProps<BaseStackParamList, "HomeDrawer">;
 
 // Exports for the BaseStack
 export {
@@ -19,25 +19,34 @@ export {
   WelcomeScreenProps,
   LoginScreenProps,
   SignUpScreenProps,
-  HomeScreenProps,
-}
+};
 
-
-type HomeDrawerParamList = {
+// Current Stack
+type CurrentStackParamList = {
   Today: undefined;
-}
+  Task: object | undefined;
+};
 
-type TodayScreenProps = DrawerScreenProps<HomeDrawerParamList, "Today">;
+type TodayScreenProps = DrawerScreenProps<CurrentStackParamList, "Today">;
+type TaskScreenProps = DrawerScreenProps<CurrentStackParamList, "Task">;
+
+// Exports for the Current Stack
+export {
+  TodayScreenProps,
+  TaskScreenProps,
+  CurrentStackParamList,
+};
+
+// Home Drawer
+type HomeDrawerParamList = {
+  CurrentStack: undefined;
+};
 
 // Exports for the Home Drawer
 export {
   HomeDrawerParamList,
-  TodayScreenProps,
-}
-
-type customIconNames = "mail-outline" | "lock-closed-outline" | "person-outline" | "add-outline";
+};
 
 // Other exports 
-export {
-  customIconNames,
-}
+type CustomIconNames = "mail-outline" | "lock-closed-outline" | "person-outline" | "add-outline";
+export type { CustomIconNames };

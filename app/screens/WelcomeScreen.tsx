@@ -6,8 +6,9 @@ import Colors from '../utils/colors'
 import { WelcomeScreenProps } from '../utils/types'
 import CustomScrollView from '../components/AppScrollView'
 import AppButton from '../components/AppButton'
+import { horizontalScale, verticalScale } from '../utils/metric'
 
-const { height, width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation: { navigate } }) => {
 
@@ -26,7 +27,7 @@ const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation: { navigate } }) => 
                     <AppText
                         fontWeight='SemiBold'
                         style={styles.headerText}>
-                        Task management & Todo List
+                        Task management & To-Do List
                     </AppText>
 
                     <AppText style={styles.subText}>
@@ -35,14 +36,14 @@ const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation: { navigate } }) => 
                         project-wise conveniently!
                     </AppText>
 
-                    <View style={{ flexDirection: "row", marginBottom: 20}}>
+                    <View style={{ flexDirection: "row", marginBottom: verticalScale(20) }}>
                         <AppButton
                             onPress={() => navigate('Login')}
                             buttonText="Let's start"
                             shadow={14}
+                            showNext={true}
                         />
                     </View>
-
                 </View>
             </CustomScrollView>
         </SafeAreaView>
@@ -58,24 +59,23 @@ const styles = StyleSheet.create({
 
     pictureFrame: {
         height: height / 2,
-        marginTop: 70,
+        marginTop: verticalScale(60),
     },
 
     headerText: {
         color: Colors.textColor1,
         fontSize: 28,
         textAlign: "center",
-        marginTop: 50,
-        paddingHorizontal: width * 0.163,
-
+        marginTop: verticalScale(45),
+        paddingHorizontal: '8%',
     },
 
     subText: {
         textAlign: "center",
-        fontSize: 16,
-        color: Colors.textColor2,
-        paddingHorizontal: width * 0.1,
-        marginTop: 28,
-        marginBottom: 10,
+        fontSize: 15.5,
+        color: Colors.hintTextColor,
+        paddingHorizontal: horizontalScale(10),
+        marginTop: verticalScale(36),
+        marginBottom: verticalScale(10),
     },
 })

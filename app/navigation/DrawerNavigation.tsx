@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import TodayScreen from '../screens/home/TodayScreen';
 import { HomeDrawerParamList } from '../utils/types';
+import CurrentStack from './CurrentStack';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
 export default function HomeDrawer() {
   return (
     <Drawer.Navigator
-      initialRouteName="Today"
+      initialRouteName="CurrentStack"
       screenOptions={{
-        headerShown: false,
+        headerShown: false,        
       }}
     >
-      <Drawer.Screen name="Today" component={TodayScreen} />
+      <Drawer.Screen name="CurrentStack" component={CurrentStack} />
     </Drawer.Navigator>
   );
 }
