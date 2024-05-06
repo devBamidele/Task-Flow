@@ -1,9 +1,9 @@
 import { ActivityIndicator, StyleProp, StyleSheet, TouchableOpacity, View, ViewProps, ViewStyle } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { FC } from 'react'
-import Colors from '../utils/colors'
-import AppText from './AppText'
-import { moderateScale, verticalScale } from '../utils/metric';
+import Colors from '../../utils/colors'
+import AppText from '../Text/AppText'
+import { moderateScale, verticalScale } from '../../utils/metric';
 
 type onPress = () => void;
 

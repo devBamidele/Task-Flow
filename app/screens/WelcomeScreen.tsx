@@ -1,12 +1,9 @@
 import { StyleSheet, View, Image, Dimensions } from 'react-native'
 import React, { FC } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import AppText from '../components/AppText'
-import Colors from '../utils/colors'
-import { WelcomeScreenProps } from '../utils/types'
-import CustomScrollView from '../components/AppScrollView'
-import AppButton from '../components/AppButton'
-import { horizontalScale, verticalScale } from '../utils/metric'
+import { AppButton, AppScrollView, AppText } from '../common';
+import { Colors, horizontalScale, verticalScale, weight } from '../utils';
+import { WelcomeScreenProps } from '../utils/types';
 
 const { height } = Dimensions.get('window');
 
@@ -16,7 +13,7 @@ const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation: { navigate } }) => 
 
     return (
         <SafeAreaView style={styles.mainView}>
-            <CustomScrollView>
+            <AppScrollView>
                 <View style={{ alignItems: "center" }}>
                     <Image
                         source={homeImage}
@@ -25,7 +22,7 @@ const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation: { navigate } }) => 
                     />
 
                     <AppText
-                        fontWeight='SemiBold'
+                        fontWeight={weight.Sb}
                         style={styles.headerText}>
                         Task management & To-Do List
                     </AppText>
@@ -45,7 +42,7 @@ const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation: { navigate } }) => 
                         />
                     </View>
                 </View>
-            </CustomScrollView>
+            </AppScrollView>
         </SafeAreaView>
     )
 }

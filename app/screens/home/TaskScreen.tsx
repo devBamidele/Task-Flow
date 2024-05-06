@@ -1,16 +1,11 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { TaskScreenProps } from '@/app/utils/types'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomScrollView from '@/app/components/AppScrollView'
-import AppText from '@/app/components/AppText'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Colors from '@/app/utils/colors'
-import AppTextInput from '@/app/components/AppTextInput'
-import { SelectCountry } from 'react-native-element-dropdown'
-import DropdownComponent from '@/app/components/DropdownComponent'
 import { SelectList } from 'react-native-dropdown-select-list'
-import AppButton from '@/app/components/AppButton'
+import { AppButton, AppScrollView, AppText, AppTextInput } from '@/app/common';
+import { Colors, weight } from '@/app/utils';
 
 
 const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
@@ -41,10 +36,10 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.mainView}>
-            <CustomScrollView>
+            <AppScrollView>
                 <View style={[styles.mainView, { paddingHorizontal: 4 }]} >
                     <View style={styles.headerRow}>
-                        <AppText fontWeight='Medium' style={styles.headerText}>
+                        <AppText fontWeight={weight.M} style={styles.headerText}>
                             Task:
                         </AppText>
 
@@ -61,7 +56,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
                     <View style={{ marginBottom: 12, marginHorizontal: 14, gap: 16 }}>
 
                         <AppTextInput
-                            forwardedRef={taskRef}
+                            assignRef={taskRef}
                             placeholder="Add New Task"
                             text={task}
                             setText={setTask}
@@ -72,7 +67,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
                         />
 
                         <AppTextInput
-                            forwardedRef={descriptionRef}
+                            assignRef={descriptionRef}
                             placeholder="Description"
                             text={description}
                             setText={setDescription}
@@ -120,7 +115,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-            </CustomScrollView>
+            </AppScrollView>
 
             <AppButton style={{position: 'absolute', bottom: 0}} buttonText={'Create'}/>
         </SafeAreaView>

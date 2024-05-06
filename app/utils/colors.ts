@@ -15,6 +15,8 @@ const Colors = {
     selectionColor : '#C2C2C2',
 
     gray : "#616161",
+
+    error : "#F67C69"
 }
 
 export default Colors;

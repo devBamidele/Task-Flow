@@ -1,12 +1,12 @@
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { FC, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomScrollView from '@/app/components/AppScrollView'
+import CustomScrollView from '@/app/common/ScrollView/AppScrollView'
 import { SignUpScreenProps } from '@/app/utils/types'
 import Colors from '@/app/utils/colors'
-import AppText from '@/app/components/AppText';
-import AppTextInput from '@/app/components/AppTextInput';
-import AppButton from '@/app/components/AppButton';
+import AppText from '@/app/common/Text/AppText';
+import AppTextInput from '@/app/common/TextInput/AppTextInput';
+import AppButton from '@/app/common/Button/AppButton';
 import { verticalScale } from '@/app/utils/metric'
 
 const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } }) => {

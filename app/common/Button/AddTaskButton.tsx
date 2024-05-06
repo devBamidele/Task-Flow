@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Colors from '@/app/utils/colors';
-import AppText from './AppText';
+import AppText from '../Text/AppText';
 
 type onPress = () => void;
 

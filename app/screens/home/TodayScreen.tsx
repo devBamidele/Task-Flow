@@ -1,19 +1,17 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import React, { FC } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomScrollView from '@/app/components/AppScrollView'
-import Colors from '@/app/utils/colors'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TodayScreenProps } from '@/app/utils/types'
-import AppText from '@/app/components/AppText'
-import AddTaskButton from '@/app/components/AddTaskButton'
+import { AddTaskButton, AppScrollView, AppText } from '@/app/common';
+import { Colors, weight } from '@/app/utils';
 
 
 const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigate } }) => {
 
     return (
         <SafeAreaView style={styles.mainView}>
-            <CustomScrollView>
+            <AppScrollView>
                 <View style={[styles.mainView, { paddingHorizontal: 10 }]} >
 
                     <View style={styles.backButton}>
@@ -27,7 +25,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigat
                         </Pressable>
 
                         <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-                            <AppText fontWeight='Medium' style={styles.headerText}>
+                            <AppText fontWeight={weight.M} style={styles.headerText}>
                                 Today
                             </AppText>
 
@@ -45,7 +43,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigat
                     </View>
 
                 </View>
-            </CustomScrollView>
+            </AppScrollView>
         </SafeAreaView>
     )
 }

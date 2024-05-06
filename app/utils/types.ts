@@ -50,3 +50,13 @@ export {
 // Other exports 
 type CustomIconNames = "mail-outline" | "lock-closed-outline" | "person-outline" | "add-outline";
 export type { CustomIconNames };
+
+
+export enum weight {
+  L = 'Light',
+  B = 'Bold',
+  M = 'Medium',
+  R = 'Regular',
+  T = 'Thin',
+  Sb = 'SemiBold',
+}

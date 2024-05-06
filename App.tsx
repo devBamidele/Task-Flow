@@ -3,9 +3,10 @@ import 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-import fontConfig from '@/app/utils/config';
+
 import BaseStack from './app/navigation/BaseStack';
 import React from 'react';
+import { fontConfig } from './app/utils/index';
 
 export { ErrorBoundary } from 'expo-router';
 

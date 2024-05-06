@@ -16,7 +16,7 @@ export default function BaseStack() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName='HomeDrawer'
+          initialRouteName='Login'
           
           screenOptions={{
             headerShown: false,
