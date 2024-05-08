@@ -7,6 +7,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import BaseStack from './app/navigation/BaseStack';
 import React from 'react';
 import { fontConfig } from './app/utils/index';
+import { Provider } from 'react-redux';
+import appStore from './app/redux/store';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -30,6 +32,9 @@ export default function App() {
   }
 
   return (
-    <BaseStack />
+    <Provider store={appStore}>
+      <BaseStack />
+    </Provider>
+    
   );
 }

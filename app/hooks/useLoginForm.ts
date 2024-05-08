@@ -5,7 +5,7 @@ import { TextInput } from "react-native";
 interface LoginFormState {
   email: string;
   password: string;
-  loading: boolean;
+
   isEmailValid: boolean;
   isPasswordValid: string | null;
   listener: boolean;
@@ -16,7 +16,6 @@ interface LoginFormState {
 const initialState: LoginFormState = {
   email: '',
   password: '',
-  loading: false,
   isEmailValid: true,
   isPasswordValid: null,
   listener: false,
@@ -34,8 +33,7 @@ const useLoginForm = () => {
 
   const toggleSnackbar = () => setState(prevState => ({ ...prevState, visible: !prevState.visible }));
   const listen = () => setState(prevState => ({ ...prevState, listener: true }))
-  const load = (loading: boolean) => setState(prevState => ({ ...prevState, loading }));
-
+  
   const setEmail = (value: string) => setState(prevState => ({ ...prevState, email: value.trim() }))
   const setPassword = (password: string) => setState(prevState => ({ ...prevState, password }))
 
@@ -45,7 +43,7 @@ const useLoginForm = () => {
 
   const clearForm = () => setState(initialState);
 
-  return { ...state, passwordInputRef, checkEmail, checkPassword, toggleSnackbar, listen, load, setEmail, setPassword, setMessage, remove, clearForm };
+  return { ...state, passwordInputRef, checkEmail, checkPassword, toggleSnackbar, listen, setEmail, setPassword, setMessage, remove, clearForm };
 };
 
 export { useLoginForm };

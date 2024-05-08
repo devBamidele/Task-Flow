@@ -1,9 +1,9 @@
 import { StyleSheet, View, Image, Dimensions } from 'react-native'
 import React, { FC } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AppButton, AppScrollView, AppText } from '../common';
-import { Colors, horizontalScale, verticalScale, weight } from '../utils';
-import { WelcomeScreenProps } from '../utils/types';
+import { AppButton, AppScrollView, AppText } from '../../common';
+import { Colors, horizontalScale, verticalScale, weight } from '../../utils';
+import { WelcomeScreenProps } from '../../utils/types';
 
 const { height } = Dimensions.get('window');
 

@@ -4,18 +4,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Snackbar } from 'react-native-paper';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import requests from '@/app/core/auth/requests';
 import { AppButton, AppScrollView, AppText, AppTextInput, DismissKeyboard } from '@/app/common';
 import { Colors, LoginScreenProps, horizontalScale, verticalScale } from '@/app/utils';
-import { useLoginForm } from './useLoginForm';
+import { useLoginForm } from '../../../../hooks/useLoginForm';
 import { weight } from '@/app/utils/types';
+
+import { useLoginUserMutation } from '@/app/redux/apiSlice';
 
 const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } }) => {
 
-    const { email, password, loading, isEmailValid, isPasswordValid, visible,
-        message, passwordInputRef, listener, listen, load, checkEmail, checkPassword,
+    const { email, password, isEmailValid, isPasswordValid, visible,
+        message, passwordInputRef, listener, listen, checkEmail, checkPassword,
         toggleSnackbar, setEmail, setPassword, setMessage, remove, clearForm
     } = useLoginForm();
+
+    const [loginUser, { isLoading, data, error }] = useLoginUserMutation();
+
+
+    // const [addNewPost, { isLoading }] = useAddNewPostMutation()
+
 
 
     useEffect(() => {
@@ -32,27 +39,34 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
         checkEmail();
         checkPassword();
 
-        loginUser();
+        next();
     }
 
 
-    const loginUser = () => {
+    const next = async () => {
         if (listener && isEmailValid && isPasswordValid == null) {
-            load(true);
 
-            requests.loginUser(email, password)
-                .then(data => {
-                    console.log(data);
+            loginUser({ email, password }).unwrap()
+                .then((res) => { 
 
-                    navigate('HomeDrawer');
                 })
-                .catch((error: Error) => {
-                    setMessage(error.message);
 
-                    toggleSnackbar();
-                }).finally(() => {
-                    load(false);
-                });
+
+                ;
+
+            // requests.loginUser(email, password)
+            //     .then(data => {
+            //         console.log(data);
+
+            //         navigate('HomeDrawer');
+            //     })
+            //     .catch((error: Error) => {
+            //         setMessage(error.message);
+
+            //         toggleSnackbar();
+            //     }).finally(() => {
+            //         load(false);
+            //     });
         }
     };
 
@@ -99,7 +113,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                                     iconName='mail-outline'
                                     returnKeyType='next'
                                     onSubmitEditing={() => passwordInputRef.current?.focus()}
-                                    editable={!loading}
+                                    editable={!isLoading}
                                 />
                                 {!isEmailValid &&
                                     <AppText fontWeight={weight.L} style={styles.errorText}>
@@ -116,7 +130,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                                     isPassword={true}
                                     iconName='lock-closed-outline'
                                     assignRef={passwordInputRef}
-                                    editable={!loading}
+                                    editable={!isLoading}
                                 />
                                 {isPasswordValid &&
                                     <AppText fontWeight={weight.L} style={styles.errorText}>
@@ -134,12 +148,12 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                                 </AppText>
                             </Pressable>
                         </View>
-                        
+
 
                         <AppButton
                             onPress={onContinue}
                             buttonText="Continue"
-                            isLoading={loading}
+                            isLoading={isLoading}
                         />
 
                         {/* Sign Up View */}
@@ -161,7 +175,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                             <View style={styles.separator} />
 
                             <View style={{ marginHorizontal: 12 }}>
-                                <AppText fontWeight={weight.M} style={[styles.secondaryText, {fontSize: 14}]}>
+                                <AppText fontWeight={weight.M} style={[styles.secondaryText, { fontSize: 14 }]}>
                                     Or continue with
                                 </AppText>
                             </View>
