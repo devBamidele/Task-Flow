@@ -1,13 +1,10 @@
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { FC, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomScrollView from '@/app/common/ScrollView/AppScrollView'
-import { SignUpScreenProps } from '@/app/utils/types'
+import { SignUpScreenProps, weight } from '@/app/utils/types'
 import Colors from '@/app/utils/colors'
-import AppText from '@/app/common/Text/AppText';
-import AppTextInput from '@/app/common/TextInput/AppTextInput';
-import AppButton from '@/app/common/Button/AppButton';
 import { verticalScale } from '@/app/utils/metric'
+import { AppButton, AppScrollView, AppText, AppTextInput } from '@/app/common'
 
 const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } }) => {
 
@@ -23,12 +20,12 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
 
   return (
     <SafeAreaView style={styles.mainView}>
-      <CustomScrollView>
+      <AppScrollView>
         <View style={[styles.mainView, { paddingHorizontal: 8 }]}>
 
           <View style={styles.loginTextView}>
             <AppText
-              fontWeight='Medium'
+              fontWeight={weight.M}
               numberOfLines={2}
               style={styles.headerText}
             >
@@ -36,7 +33,7 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
             </AppText>
 
             <AppText
-              fontWeight='Light'
+              fontWeight={weight.L}
               style={[styles.secondaryText, { marginLeft: 10 }]}>
               Fill out your details below
             </AppText>
@@ -63,7 +60,7 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
               returnKeyType='next'
               keyboardType="email-address"
               onSubmitEditing={() => passwordInputRef.current?.focus()}
-              forwardedRef={emailInputRef}
+              assignRef={emailInputRef}
             />
 
             <AppTextInput
@@ -75,7 +72,7 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
               iconName='lock-closed-outline'
               returnKeyType='next'
               onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
-              forwardedRef={passwordInputRef}
+              assignRef={passwordInputRef}
             />
 
             <AppTextInput
@@ -86,7 +83,7 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
               secureTextEntry
               iconName='lock-closed-outline'
               isPassword={true}
-              forwardedRef={confirmPasswordInputRef}
+              assignRef={confirmPasswordInputRef}
             />
 
           </View>
@@ -97,14 +94,14 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
           />
 
           <View style={styles.signView}>
-            <AppText fontWeight='Light' style={{ color: Colors.hintTextColor, fontSize: 15.5 }}>
+            <AppText fontWeight={weight.L} style={{ color: Colors.hintTextColor, fontSize: 15.5 }}>
               Already have an account ?
             </AppText>
 
             <TouchableOpacity activeOpacity={0.6}
               onPress={goBack}
             >
-              <AppText fontWeight='Medium' style={styles.signUpText}>
+              <AppText fontWeight={weight.M}style={styles.signUpText}>
                 Login
               </AppText>
             </TouchableOpacity>
@@ -114,15 +111,15 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
           <AppText style={styles.bottomText}>
             By tapping Continue, you agree to our
 
-            <AppText fontWeight='Medium' style={styles.policy}>Terms</AppText>
+            <AppText fontWeight={weight.M} style={styles.policy}>Terms</AppText>
 
             <AppText>&</AppText>
 
-            <AppText fontWeight='Medium' style={styles.policy} >Privacy </AppText>
+            <AppText fontWeight={weight.M} style={styles.policy} >Privacy </AppText>
           </AppText>
 
         </View>
-      </CustomScrollView>
+      </AppScrollView>
     </SafeAreaView>
   )
 }

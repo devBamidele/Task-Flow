@@ -2,11 +2,13 @@
 
 namespace Endpoints {
     export const baseUrl = 'https://todo-app-gcp.uc.r.appspot.com';
-    const taskBase = `${baseUrl}/tasks`;
+    const taskBase = `/tasks`;
+    const authBase = `/auth`;
 
     // Authentication
-    export const login = `/auth/login`;
-    export const signup = `${baseUrl}/auth/register`;
+    export const login = `${authBase}/login`;
+    export const logout = `${authBase}/logout`;
+    export const register = `${authBase}/register`;
 
     // Tasks
     export const taskGetAll = `${taskBase}/all`;

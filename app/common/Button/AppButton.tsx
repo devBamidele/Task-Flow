@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import Colors from '../../utils/colors'
 import AppText from '../Text/AppText'
 import { moderateScale, verticalScale } from '../../utils/metric';
+import { weight } from '@/app/utils';
 
 type onPress = () => void;
 
@@ -25,7 +26,7 @@ const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = false, 
                 disabled={isLoading}
                 onPress={onPress}
                 activeOpacity={0.6}
-                style={[styles.button, { elevation: shadow }]}>
+                style={[styles.button, isLoading && styles.loadingButton, { elevation: shadow }]}>
 
                 <View style={styles.shrinkBox} />
 
@@ -36,7 +37,7 @@ const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = false, 
                             size={moderateScale(22)}
                         /> :
                         <AppText
-                            fontWeight='SemiBold'
+                            fontWeight={weight.Sb}
                             style={styles.buttonText}>
                             {buttonText}
                         </AppText>
@@ -79,6 +80,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 8,
     },
+
+    loadingButton: {
+        opacity: 0.7,
+      },
 
     shrinkBox: {
         width: 28,

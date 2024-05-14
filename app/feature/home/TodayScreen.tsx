@@ -1,13 +1,21 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
 import React, { FC } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TodayScreenProps } from '@/app/utils/types'
 import { AddTaskButton, AppScrollView, AppText } from '@/app/common';
 import { Colors, weight } from '@/app/utils';
+import { useSelector } from 'react-redux';
+import { selectTasks } from '@/app/redux/tasks/slice';
+import { useGetAllQuery } from '@/app/redux/tasks/service';
 
 
 const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigate } }) => {
+
+    const { isLoading, isError, isSuccess } = useGetAllQuery();
+
+    const tasks = useSelector(selectTasks);
+
 
     return (
         <SafeAreaView style={styles.mainView}>
@@ -41,6 +49,25 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigat
                     <View style={{ paddingHorizontal: 14, marginTop: 28 }}>
                         <AddTaskButton onPress={() => navigate('Task')} buttonText='Add New Task' />
                     </View>
+
+
+                    {isLoading &&
+                        <ActivityIndicator/>
+                    }
+
+                    {isError &&
+                        <AppText>
+                            An error occurred
+                        </AppText>
+                    }
+
+
+                    {isSuccess &&
+                        tasks.map((task) => (
+                            <AppText key={task._id}>{task.title}</AppText>
+                        ))
+                    }
+
 
                 </View>
             </AppScrollView>

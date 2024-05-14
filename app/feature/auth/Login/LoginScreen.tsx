@@ -1,34 +1,27 @@
 import React, { FC, useEffect } from 'react';
 import { StyleSheet, View, Pressable, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Snackbar } from 'react-native-paper';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { AppButton, AppScrollView, AppText, AppTextInput, DismissKeyboard } from '@/app/common';
 import { Colors, LoginScreenProps, horizontalScale, verticalScale } from '@/app/utils';
-import { useLoginForm } from '../../../../hooks/useLoginForm';
+import { useForm } from './useForm';
 import { weight } from '@/app/utils/types';
+import { useLoginUser } from '@/app/hooks';
 
-import { useLoginUserMutation } from '@/app/redux/apiSlice';
 
 const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } }) => {
 
-    const { email, password, isEmailValid, isPasswordValid, visible,
-        message, passwordInputRef, listener, listen, checkEmail, checkPassword,
-        toggleSnackbar, setEmail, setPassword, setMessage, remove, clearForm
-    } = useLoginForm();
+    const { email, password, isEmailValid, isPasswordValid,
+        passwordInputRef, listener, listen, checkCredentials,
+        setEmail, setPassword, clearForm
+    } = useForm();
 
-    const [loginUser, { isLoading, data, error }] = useLoginUserMutation();
-
-
-    // const [addNewPost, { isLoading }] = useAddNewPostMutation()
-
-
+    const { loginUser, isLoading } = useLoginUser();
 
     useEffect(() => {
         if (listener) {
-            checkEmail();
-            checkPassword();
+            checkCredentials();
         }
     }, [email, password, listener]);
 
@@ -36,8 +29,11 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
     function onContinue() {
         listen();
 
-        checkEmail();
-        checkPassword();
+        setEmail('bamideledavid.femi@gmail.com');
+
+        setPassword('Bamidele1234')
+
+        checkCredentials();
 
         next();
     }
@@ -46,27 +42,14 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
     const next = async () => {
         if (listener && isEmailValid && isPasswordValid == null) {
 
-            loginUser({ email, password }).unwrap()
-                .then((res) => { 
+            loginUser({
+                data: { email, password },
+                next: () => {
+                    navigate('HomeDrawer');
 
-                })
-
-
-                ;
-
-            // requests.loginUser(email, password)
-            //     .then(data => {
-            //         console.log(data);
-
-            //         navigate('HomeDrawer');
-            //     })
-            //     .catch((error: Error) => {
-            //         setMessage(error.message);
-
-            //         toggleSnackbar();
-            //     }).finally(() => {
-            //         load(false);
-            //     });
+                    clearForm();
+                }
+            })
         }
     };
 
@@ -196,17 +179,6 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
                 </DismissKeyboard>
             </AppScrollView>
 
-            <Snackbar
-                children={
-                    <AppText style={styles.snackText}>
-                        {message}
-                    </AppText>
-                }
-                duration={3000}
-                visible={visible}
-                onDismiss={remove}>
-
-            </Snackbar>
         </SafeAreaView>
     )
 }

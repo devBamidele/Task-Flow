@@ -9,6 +9,8 @@ import React from 'react';
 import { fontConfig } from './app/utils/index';
 import { Provider } from 'react-redux';
 import appStore from './app/redux/store';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './app/common/Toast/toastConfig';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -34,6 +36,7 @@ export default function App() {
   return (
     <Provider store={appStore}>
       <BaseStack />
+      <Toast config={toastConfig}/>
     </Provider>
     
   );

@@ -2,7 +2,7 @@ import React, { FC, ForwardedRef, RefObject, useRef, useState } from 'react';
 import { TextInput, TextInputProps, StyleSheet, View, Pressable } from 'react-native';
 import Colors, { addOpacity } from '../../utils/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { CustomIconNames } from '../../utils/types';
+import { CustomIconNames, weight } from '../../utils/types';
 import { horizontalScale, verticalScale } from '../../utils/metric';
 
 interface AppTextInputProps extends TextInputProps {
@@ -65,7 +65,9 @@ const AppTextInput: FC<AppTextInputProps> = ({
                     cursorColor={Colors.textColor1}
                     secureTextEntry={passwordHidden}
                     style={[styles.textInputStyle, { paddingLeft: textPadding }]}
+                    
                 />
+
                 {
                     isPassword &&
                     <View style={{ alignItems: "center" }}>
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     },
 
     textInputStyle: {
-        fontFamily: "Light",
+        fontFamily: weight.L,
         paddingVertical: verticalScale(13),
         fontSize: 16.5,
         flex: 1,
