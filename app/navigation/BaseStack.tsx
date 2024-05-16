@@ -8,15 +8,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import LoginScreen from '../feature/auth/Login/LoginScreen';
 import SignUpScreen from '../feature/auth/SignUp/SignUpScreen';
 import WelcomeScreen from '../feature/welcome/WelcomeScreen';
+import { useSelector } from 'react-redux';
+import { isLoggedIn } from '../redux/user/slice';
 
 const Stack = createNativeStackNavigator<BaseStackParamList>();
 
 export default function BaseStack() {
+
+  const loggedIn = useSelector(isLoggedIn);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName='Login'
+          initialRouteName={loggedIn ? 'HomeDrawer' : 'Login'} 
           
           screenOptions={{
             headerShown: false,

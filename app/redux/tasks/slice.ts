@@ -17,14 +17,26 @@ const taskSlice = createSlice({
     reducers: {
         updateTasks: (state, action: PayloadAction<Task[]>) => {
             state.data.push(...action.payload);
-        }
+        } 
     },
 
     extraReducers(builder) {
         builder.addMatcher(
             tasksApi.endpoints.getAll.matchFulfilled,
             (state, { payload }) => {
-                state.data.push(...payload)
+
+                console.log(payload);
+
+                payload.forEach((newTask) => {
+
+                    const taskIndex = state.data.findIndex((task) => task._id === newTask._id);
+
+                    if (taskIndex !== -1) {
+                        state.data[taskIndex] = { ...state.data[taskIndex], ...newTask };
+                    } else {
+                        state.data.push(newTask);
+                    }
+                });
             }
         )
     },

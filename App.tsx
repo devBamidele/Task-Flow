@@ -6,11 +6,12 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import BaseStack from './app/navigation/BaseStack';
 import React from 'react';
-import { fontConfig } from './app/utils/index';
 import { Provider } from 'react-redux';
-import appStore from './app/redux/store';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from './app/common/Toast/toastConfig';
+import { appStore, persistor } from './app/redux/store';
+import { fontConfig } from './app/utils';
+import { PersistGate } from 'redux-persist/integration/react';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -35,9 +36,10 @@ export default function App() {
 
   return (
     <Provider store={appStore}>
-      <BaseStack />
-      <Toast config={toastConfig}/>
+      <PersistGate persistor={persistor}>
+        <BaseStack />
+        <Toast config={toastConfig}/>
+      </PersistGate>
     </Provider>
-    
   );
 }

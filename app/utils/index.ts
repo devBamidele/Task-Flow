@@ -1,20 +1,13 @@
-import Colors from '@/app/utils/colors'
-import { validateEmail, validatePassword } from '@/app/utils/helper_functions';
-import { horizontalScale, verticalScale } from '@/app/utils/metric';
-import { LoginScreenProps } from '@/app/utils/types'
-import fontConfig from '@/app/utils/config';
-import { addOpacity } from '@/app/utils/colors';
-import { weight } from '@/app/utils/types';
+export { default as Colors } from '@/app/utils/colors';
 
+export { validateEmail, validatePassword } from '@/app/utils/helper_functions';
 
-export {
-    Colors,
-    addOpacity,
-    validateEmail,
-    validatePassword,
-    horizontalScale,
-    verticalScale,
-    LoginScreenProps,
-    fontConfig,
-    weight
-}
+export { horizontalScale, verticalScale } from '@/app/utils/metric';
+
+export { LoginScreenProps } from '@/app/utils/types';
+
+export { default as fontConfig } from '@/app/utils/config';
+
+export { addOpacity } from '@/app/utils/colors';
+
+export { weight, BaseStackParamList, WelcomeScreenProps, LoginScreenProps as BaseLoginScreenProps, SignUpScreenProps, TodayScreenProps, TaskScreenProps, CurrentStackParamList, HomeDrawerParamList, CustomIconNames } from '@/app/utils/types';

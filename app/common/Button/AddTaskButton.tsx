@@ -23,10 +23,10 @@ const AddTaskButton: FC<addTaskButtonProps> = ({ onPress, buttonText }) => {
                 <Ionicons
                     size={24}
                     name={"add"}
-                    color={Colors.textColor1} />
+                    color={Colors.textColor3} />
 
                 <AppText
-                    
+
                     style={styles.buttonText}>
                     {buttonText}
                 </AppText>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 
     buttonText: {
         textAlign: "center",
-        color: Colors.textColor1,
+        color: Colors.textColor3,
         fontSize: 16,
         marginLeft: 4,
     }

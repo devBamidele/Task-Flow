@@ -3,3 +3,8 @@ export interface userState {
     token : string,
     email : string,
 }
+
+export interface startUp {
+    user : userState,
+    isLoggedIn : boolean,
+}

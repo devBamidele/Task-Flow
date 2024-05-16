@@ -6,7 +6,6 @@ export interface loginUserParams {
     next: VoidFunction,
 }
 
-
 export interface loginError {
     data: { error: string },
     status: number
