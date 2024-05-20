@@ -1,10 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { userState } from "./service.types";
-import { RootState } from "../store";
+import { UserState } from "./service.types";
 
-const initialState: userState = {
+const initialState: UserState = {
     name: "",
-    token: "",
     email: "",
 }
 
@@ -12,15 +10,11 @@ const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        updateUserData(state, action: PayloadAction<Partial<userState>>) {
+        updateUserData(state, action: PayloadAction<Partial<UserState>>) {
             Object.assign(state, action.payload);
         }
     }
 })
-
-export const isLoggedIn = (state: RootState) => {
-    return state.user.token != null && state.user.token.length !== 0;
-};
 
 export const { updateUserData } = userSlice.actions;
 

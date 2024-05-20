@@ -4,18 +4,18 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AddTaskButton, AppText, AppTile } from '@/app/common';
 import { Colors, TodayScreenProps, weight } from '@/app/utils';
-import { useSelector } from 'react-redux';
 import { selectTasks, useGetAllQuery } from '@/app/redux/tasks';
 import { moderateScale } from '@/app/utils/metric';
+import { useAppSelector } from '@/app/hooks';
 
 
 const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigate } }) => {
 
-    const queryOptions = { refetchOnMountOrArgChange: 3600 }
+    const queryOptions = { refetchOnMountOrArgChange: 10 }
 
-    const { isLoading, isError, error, isSuccess } = useGetAllQuery(undefined, queryOptions);
+    const { isLoading, isError, error, isSuccess,currentData } = useGetAllQuery(undefined, queryOptions);
 
-    const tasks = useSelector(selectTasks);
+    const tasks = useAppSelector(selectTasks);
 
     return (
         <SafeAreaView style={styles.mainView}>

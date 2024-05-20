@@ -1,3 +1,4 @@
+import { loginError } from "../hooks/types";
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -25,8 +26,13 @@ function validatePassword(password : string) {
     return null; // Password is valid
 }
 
+function isLoginError(error: any): error is loginError {
+    return (error as loginError).data !== undefined;
+}
+
 
 export {
     validateEmail,
     validatePassword,
+    isLoginError,
 }

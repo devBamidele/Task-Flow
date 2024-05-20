@@ -8,14 +8,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import LoginScreen from '../feature/auth/Login/LoginScreen';
 import SignUpScreen from '../feature/auth/SignUp/SignUpScreen';
 import WelcomeScreen from '../feature/welcome/WelcomeScreen';
-import { useSelector } from 'react-redux';
-import { isLoggedIn } from '../redux/user/slice';
+import { isLoggedIn } from '../redux/auth/slice';
+import { useAppSelector } from '../hooks';
 
 const Stack = createNativeStackNavigator<BaseStackParamList>();
 
 export default function BaseStack() {
 
-  const loggedIn = useSelector(isLoggedIn);
+  const loggedIn = useAppSelector(isLoggedIn);
 
   return (
     <SafeAreaProvider>

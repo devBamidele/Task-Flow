@@ -14,8 +14,6 @@ export interface TaskResponse {
     tasks : Task[],
 }
 
-
-
 export interface AddTaskResponse {
     message : string
 }

@@ -1,10 +1,4 @@
-export interface userState {
+export interface UserState {
     name : string,
-    token : string,
     email : string,
-}
-
-export interface startUp {
-    user : userState,
-    isLoggedIn : boolean,
 }

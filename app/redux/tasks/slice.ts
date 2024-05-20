@@ -42,7 +42,7 @@ const taskSlice = createSlice({
     },
 });
 
-export const selectTasks = (state: RootState) => state.task.data;
+export const selectTasks = (state : any) => state.task.data;
 
 export const { updateTasks } = taskSlice.actions;
 

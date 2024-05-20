@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../redux/auth/service";
 import showToast from "../common/Toast/showToast";
-import { loginError, loginUserParams } from "./types";
+import { FetchError, loginError, loginUserParams } from "./types";
 import { updateUserData } from "../redux/user/slice";
+import { updateTokens } from "../redux/auth/slice";
+import { useAppDispatch } from "./types";
+import { isLoginError } from "../utils";
 
 const useLoginUser = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const [login, { isLoading }] = useLoginMutation();
 
 
@@ -16,21 +17,29 @@ const useLoginUser = () => {
         login(params.data).unwrap()
             .then((res) => {
 
-                const { message, data, token } = res || {};
+                const { message, data, tokens } = res || {};
 
-                dispatch(updateUserData({ ...data, token }));
+                dispatch(updateUserData({ ...data }));
+
+                dispatch(updateTokens({ ...tokens }))
 
                 params.next();
 
             })
-            .catch((err: loginError) => {
-
-                showToast({
-                    title: 'Oops ',
-                    message: err.data.error,
-                })
-
-            })
+            .catch((err: loginError | FetchError) => {
+                if (isLoginError(err)) {
+                    showToast({
+                        title: 'Oops',
+                        message: err.data.error,
+                    });
+                } else {
+                    showToast({
+                        title: 'Network Error',
+                        message: err.error,
+                    });
+                }
+            });
+            
     }
 
     return {
