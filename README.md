@@ -1,6 +1,6 @@
-# Todo App - Frontend (React Native)
+# Task Flow - Frontend (React Native)
 
-Welcome to the frontend development repository of the Todo app! This README provides an overview of the project structure, setup instructions, and guidelines for development and contribution.
+Welcome to the front-end development repository of the Todo app! This README provides an overview of the project structure, setup instructions, and guidelines for development and contribution.
 
 ## Table of Contents
 
@@ -10,14 +10,14 @@ Welcome to the frontend development repository of the Todo app! This README prov
 
 ## 1. Introduction
 
-This React Native project serves as the frontend of our Todo application. It provides a user-friendly interface for managing tasks, organizing them by category, setting priorities, and due dates.
+This React Native project serves as the front end of the application. It provides a user-friendly interface for managing tasks, organizing them by category, setting priorities, and due dates.
 
 ## 2. Project Structure
 
 The project structure follows typical React Native conventions:
 
 ```
-todo-frontend/
+task-flow/
 │
 ├── app/                       # Source code directory
 │   ├── components/            # Reusable components
