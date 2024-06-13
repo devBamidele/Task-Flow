@@ -1,28 +1,48 @@
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, View } from 'react-native'
-import React, { FC } from 'react'
+import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AddTaskButton, AppText, AppTile } from '@/app/common';
 import { Colors, TodayScreenProps, weight } from '@/app/utils';
 import { selectTasks, useGetAllQuery } from '@/app/redux/tasks';
 import { moderateScale } from '@/app/utils/metric';
-import { useAppSelector } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { onlineState } from '@/app/redux/user/slice';
+import { api } from '@/app/redux/api';
+import { tasksApi } from '@/app/redux/tasks/service';
 
 
-const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigate } }) => {
+const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
 
-    const queryOptions = { refetchOnMountOrArgChange: 10 }
+    const [refreshing, setRefreshing] = useState(false);
 
-    const { isLoading, isError, error, isSuccess,currentData } = useGetAllQuery(undefined, queryOptions);
+    const dispatch = useAppDispatch();
+
+    const { isLoading, isError, error, isSuccess, data, refetch } = useGetAllQuery();
+
+    const online = useAppSelector(onlineState);
 
     const tasks = useAppSelector(selectTasks);
+
+    const onRefresh = useCallback(async () => {
+
+        setRefreshing(true);
+
+        const result = await refetch();
+
+        // Useful for logging purposes
+        //console.log(`The reult from the data is ${JSON.stringify(result)}`)
+
+        setRefreshing(false);
+
+    }, []);
 
     return (
         <SafeAreaView style={styles.mainView}>
             <View style={[styles.mainView, { paddingHorizontal: 10 }]} >
 
                 <View style={styles.backButton}>
-                    <Pressable onPress={toggleDrawer} >
+                    <Pressable onPress={navigation.toggleDrawer} >
                         <Ionicons
                             size={28}
                             name={"menu-outline"}
@@ -45,12 +65,12 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigat
                 </View>
 
 
-                <View style={{ paddingHorizontal: 14, marginTop: 28 }}>
-                    <AddTaskButton onPress={() => navigate('Task')} buttonText='Add New Task' />
+                <View style={{ paddingHorizontal: 12, marginTop: 24 }}>
+                    <AddTaskButton onPress={() => navigation.navigate('Task')} buttonText='Add New Task' />
                 </View>
 
 
-                { isLoading &&
+                {isLoading &&
                     <View style={styles.center} >
                         <ActivityIndicator
                             color={Colors.primary}
@@ -59,27 +79,31 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation: { toggleDrawer, navigat
                     </View>
                 }
 
-                {isError &&
+                {isError && online &&
                     <View style={styles.center} >
                         <AppText>
-                            An error occurred
+                            {isSuccess ? 'Is success' : 'Not success'}
                         </AppText>
                     </View>
                 }
 
                 <View style={styles.taskList}>
-                    {isSuccess && (
+                    {(data !== undefined &&
                         <FlatList
                             data={tasks}
                             keyExtractor={(task) => task._id}
                             renderItem={({ item, index }) => (
-                                <AppTile item={item} index={index} />
+                                <AppTile item={item} index={index} navigation={navigation} route={route} />
                             )}
+                            refreshControl={
+                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                            }
                             ItemSeparatorComponent={() =>
                                 <View
                                     style={styles.seperator}
                                 />
                             }
+                            showsVerticalScrollIndicator={false}
                         />
                     )}
                 </View>
@@ -129,7 +153,7 @@ const styles = StyleSheet.create({
         height: StyleSheet.hairlineWidth,
         backgroundColor: Colors.divider,
         marginHorizontal: 6,
-       
+        marginVertical: 0
     },
 
     checkbox: {
@@ -140,7 +164,7 @@ const styles = StyleSheet.create({
     },
 
     taskList: {
-        marginHorizontal: 6
+        marginHorizontal: 4
     }
 
 })

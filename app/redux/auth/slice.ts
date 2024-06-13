@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AuthState } from "./service.types";
-import { authenticationApi } from "./service";
 
 const initialState: AuthState = {
     token: "",
@@ -17,6 +16,7 @@ const authSlice = createSlice({
 
         loggedOut(state){
             state.token = "";
+            state.refresh = "";
         }
     },
 

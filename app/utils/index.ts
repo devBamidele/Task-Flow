@@ -6,7 +6,7 @@ export { horizontalScale, verticalScale } from '@/app/utils/metric';
 
 export { LoginScreenProps } from '@/app/utils/types';
 
-export { default as fontConfig } from '@/app/utils/config';
+export { fontConfig, getFontFamily } from '@/app/utils/config';
 
 export { addOpacity } from '@/app/utils/colors';
 

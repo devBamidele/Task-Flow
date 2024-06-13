@@ -25,33 +25,16 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
         }
     }, [email, password, listener]);
 
-
-    function onContinue() {
+    const onSubmit = () => {
         listen();
 
-        setEmail('bamideledavid.femi@gmail.com');
-
-        setPassword('Bamidele1234')
-
-        checkCredentials();
-
-        next();
-    }
-
-
-    const next = async () => {
-        if (listener && isEmailValid && isPasswordValid == null) {
-
+        if (checkCredentials()) {
             loginUser({
                 data: { email, password },
-                next: () => {
-                    navigate('HomeDrawer');
-
-                    clearForm();
-                }
+                next: () => clearForm(),
             })
         }
-    };
+    }
 
     return (
         <SafeAreaView style={styles.mainView}>
@@ -134,7 +117,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
 
 
                         <AppButton
-                            onPress={onContinue}
+                            onPress={onSubmit}
                             buttonText="Continue"
                             isLoading={isLoading}
                         />

@@ -26,7 +26,6 @@ const AddTaskButton: FC<addTaskButtonProps> = ({ onPress, buttonText }) => {
                     color={Colors.textColor3} />
 
                 <AppText
-
                     style={styles.buttonText}>
                     {buttonText}
                 </AppText>

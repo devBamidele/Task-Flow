@@ -2,17 +2,20 @@ import { StyleSheet, View, Image, Dimensions } from 'react-native'
 import React, { FC } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppButton, AppScrollView, AppText } from '../../common';
-import { Colors, horizontalScale, verticalScale, weight } from '../../utils';
+import { Colors, verticalScale, weight } from '../../utils';
 import { WelcomeScreenProps } from '../../utils/types';
+import { ms, mvs } from 'react-native-size-matters';
 
 const { height } = Dimensions.get('window');
 
-const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation: { navigate } }) => {
+const WelcomeScreen: FC<WelcomeScreenProps> = (props) => {
+
+    const { navigation: { navigate } } = props;
 
     const homeImage = require("@/assets/images/welcome.png")
 
     return (
-        <SafeAreaView style={styles.mainView}>
+        <SafeAreaView style={styles.mainView} edges={['top', 'left', 'right']}>
             <AppScrollView>
                 <View style={{ alignItems: "center" }}>
                     <Image
@@ -33,14 +36,15 @@ const WelcomeScreen: FC<WelcomeScreenProps> = ({ navigation: { navigate } }) => 
                         project-wise conveniently!
                     </AppText>
 
-                    <View style={{ flexDirection: "row", marginBottom: verticalScale(20) }}>
-                        <AppButton
-                            onPress={() => navigate('Login')}
-                            buttonText="Let's start"
-                            shadow={14}
-                            showNext={true}
-                        />
-                    </View>
+                </View>
+
+                <View style={{ flexDirection: "row", }}>
+                    <AppButton
+                        onPress={() => navigate('Login')}
+                        buttonText="Let's start"
+                        shadow={8}
+                        showNext={true}
+                    />
                 </View>
             </AppScrollView>
         </SafeAreaView>
@@ -55,24 +59,24 @@ const styles = StyleSheet.create({
     },
 
     pictureFrame: {
-        height: height / 2,
-        marginTop: verticalScale(60),
+        height: mvs(height / 2.4),
+        marginTop: mvs(60),
     },
 
     headerText: {
         color: Colors.textColor1,
-        fontSize: 28,
+        fontSize: ms(23),
         textAlign: "center",
-        marginTop: verticalScale(45),
+        marginTop: mvs(40),
         paddingHorizontal: '8%',
     },
 
     subText: {
         textAlign: "center",
-        fontSize: 15.5,
+        fontSize: ms(13),
         color: Colors.hintTextColor,
-        paddingHorizontal: horizontalScale(10),
-        marginTop: verticalScale(36),
-        marginBottom: verticalScale(10),
+        paddingHorizontal: ms(15),
+        marginTop: mvs(26),
+        marginBottom: mvs(10),
     },
 })

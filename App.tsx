@@ -10,8 +10,9 @@ import { Provider } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from './app/common/Toast/toastConfig';
 import { appStore, persistor } from './app/redux/store';
-import { fontConfig } from './app/utils';
 import { PersistGate } from 'redux-persist/integration/react';
+import NetworkConnectivity from './app/common/Network/NetworkConnectivity';
+import { fontConfig } from './app/utils';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -39,6 +40,7 @@ export default function App() {
       <PersistGate persistor={persistor}>
         <BaseStack />
         <Toast config={toastConfig}/>
+        {/* <NetworkConnectivity/> */}
       </PersistGate>
     </Provider>
   );

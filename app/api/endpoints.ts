@@ -16,7 +16,7 @@ namespace Endpoints {
     export const taskGetAll = `${taskBase}/all`;
     export const taskGet = (id: string) => `${taskBase}/${id}`;
     export const taskAdd = `${taskBase}/add`;
-    export const taskUpdate = (id: string) => `${taskBase}/update/${id}`;
+    export const taskUpdate = `${taskBase}/update`;
     export const taskDelete = (id: string) => `${taskBase}/${id}`;
 }
 

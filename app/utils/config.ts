@@ -1,12 +1,37 @@
+import { Platform } from "react-native";
+import { weight } from "./types";
+
+const dir = '@/assets/fonts/';
 
 const fontConfig = {
-    'Bold': require('@/assets/fonts/LexendDeca-Bold.ttf'),
-    'Thin': require('@/assets/fonts/LexendDeca-Thin.ttf'),
-    'Light': require('@/assets/fonts/LexendDeca-Light.ttf'),
-    'Medium': require('@/assets/fonts/LexendDeca-Medium.ttf'),
-    'Regular': require('@/assets/fonts/LexendDeca-Regular.ttf'),
-    'SemiBold': require('@/assets/fonts/LexendDeca-SemiBold.ttf'),
+  'Bold': require(`${dir}LexendDeca-Bold.ttf`),
+  'Thin': require(`${dir}LexendDeca-Thin.ttf`),
+  'Light': require(`${dir}LexendDeca-Light.ttf`),
+  'Medium': require(`${dir}LexendDeca-Medium.ttf`),
+  'Regular': require(`${dir}LexendDeca-Regular.ttf`),
+  'SemiBold': require(`${dir}LexendDeca-SemiBold.ttf`),
+  'iBold': require(`${dir}SF-Pro-Display-Bold.otf`),
+  'iThin': require(`${dir}SF-Pro-Display-Thin.otf`),
+  'iLight': require(`${dir}SF-Pro-Display-Light.otf`),
+  'iMedium': require(`${dir}SF-Pro-Display-Medium.otf`),
+  'iRegular': require(`${dir}SF-Pro-Display-Regular.otf`),
+  'iSemiBold': require(`${dir}SF-Pro-Display-Semibold.otf`),
+};
+
+const isiOS = Platform.OS === 'ios';
+
+const getFontFamily = (fontWeight: weight) => {
+
+  const fontMapping = {
+    [weight.B]: isiOS ? 'iBold' : 'Bold',
+    [weight.T]: isiOS ? 'iThin' : 'Thin',
+    [weight.L]: isiOS ? 'iLight' : 'Light',
+    [weight.M]: isiOS ? 'iMedium' : 'Medium',
+    [weight.R]: isiOS ? 'iRegular' : 'Regular',
+    [weight.Sb]: isiOS ? 'iSemiBold' : 'SemiBold',
   };
-  
-  export default fontConfig;
-  
+
+  return fontMapping[fontWeight];
+};
+
+export { fontConfig, getFontFamily };

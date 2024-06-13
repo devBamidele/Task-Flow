@@ -1,5 +1,7 @@
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Task } from "../redux/tasks";
+import { Platform } from "react-native";
 
 // Base Stack
 type BaseStackParamList = {
@@ -24,7 +26,7 @@ export {
 // Current Stack
 type CurrentStackParamList = {
   Today: undefined;
-  Task: object | undefined;
+  Task: Task | undefined;
 };
 
 type TodayScreenProps = DrawerScreenProps<CurrentStackParamList, "Today">;
@@ -51,9 +53,8 @@ export {
 type CustomIconNames = "mail-outline" | "lock-closed-outline" | "person-outline" | "add-outline";
 export type { CustomIconNames };
 
-
 export enum weight {
-  L = 'Light',
+  L = 'Light' ,
   B = 'Bold',
   M = 'Medium',
   R = 'Regular',

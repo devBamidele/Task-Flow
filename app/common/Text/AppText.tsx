@@ -1,19 +1,23 @@
+import { getFontFamily } from '@/app/utils';
 import { weight } from '@/app/utils/types';
 import React from 'react';
-import { Text, TextProps } from 'react-native';
+import { Platform, Text, TextProps } from 'react-native';
 
 
 
 interface AppTextProps extends TextProps {
-  fontWeight?: weight; 
+  fontWeight?: weight;
 }
 
-const AppText: React.FC<AppTextProps> = ({ children, fontWeight = weight.R, style, ...rest }) => {
-  const fontFamily = `${fontWeight}`;
+const AppText: React.FC<AppTextProps> = (props) => {
 
-  const mergedStyle = [{ fontFamily }, style ];
+  const { children, fontWeight = weight.R, style, ...rest } = props;
 
-  return ( <Text style={mergedStyle} {...rest}> {children} </Text> );
+  const fontFamily = getFontFamily(fontWeight);
+
+  const mergedStyle = [{ fontFamily }, style];
+
+  return (<Text style={mergedStyle} {...rest}> {children} </Text>);
 };
 
 export default AppText;

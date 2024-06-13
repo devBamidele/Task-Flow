@@ -27,6 +27,9 @@ const useLoginUser = () => {
 
             })
             .catch((err: loginError | FetchError) => {
+
+                console.log(JSON.stringify(err))
+
                 if (isLoginError(err)) {
                     showToast({
                         title: 'Oops',

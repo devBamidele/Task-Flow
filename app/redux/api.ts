@@ -10,6 +10,7 @@ import type {
     FetchBaseQueryError,
     FetchBaseQueryMeta,
 } from '@reduxjs/toolkit/query'
+
 import { loggedOut, updateTokens } from './auth/slice';
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 
@@ -19,7 +20,12 @@ async function refreshAccessToken(
     refresh: string,
     api: BaseQueryApi,
     extraOptions: {}
-): Promise<QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>> {
+): Promise<
+    QueryReturnValue<
+        unknown,
+        FetchBaseQueryError,
+        FetchBaseQueryMeta
+    >> {
 
     return await baseQuery({
         method: 'GET',
@@ -51,6 +57,9 @@ const baseQueryWithReauth: BaseQueryFn<
     await mutex.waitForUnlock();
 
     let res = await baseQuery(args, api, extraOptions);
+
+    // Useful for logging purposes
+    // console.log(`The response data \n ${JSON.stringify(res.data)}`);
 
     if (res.error && (res.meta?.response?.status === 403 || res.meta?.response?.status === 401)) {
 
@@ -95,8 +104,9 @@ export const api = createApi({
 
     baseQuery: baseQueryWithReauth,
 
+    refetchOnMountOrArgChange: 120,
+
     endpoints: () => ({}),
 
-    tagTypes: []
-
+    tagTypes: ['Tasks'],
 })

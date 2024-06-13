@@ -23,11 +23,15 @@ const useForm = () => {
   const [state, setState] = useState<LoginFormState>(initialState);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const checkCredentials = () => setState(prevState => ({
-    ...prevState,
-    isEmailValid: validateEmail(state.email),
-    isPasswordValid: validatePassword(state.password)
-  }))
+  const checkCredentials = () => {
+    const listener = state.listener;
+    const isEmailValid = validateEmail(state.email);
+    const isPasswordValid = validatePassword(state.password);
+
+    setState(prevState => ({ ...prevState, isEmailValid, isPasswordValid }))
+
+    return [listener, isEmailValid, !isPasswordValid].every(Boolean);
+  }
 
   const listen = () => setState(prevState => ({ ...prevState, listener: true }))
 

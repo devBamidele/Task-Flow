@@ -4,14 +4,17 @@ import Colors, { addOpacity } from '../../utils/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { CustomIconNames, weight } from '../../utils/types';
 import { horizontalScale, verticalScale } from '../../utils/metric';
+import { ms } from 'react-native-size-matters';
 
 interface AppTextInputProps extends TextInputProps {
     text: string;
     isTask?: boolean,
+    isList?: boolean,
     iconSize?: number
     isPassword?: boolean,
     textPadding?: number,
     preffixPadding?: number
+    squareColor?: string,
     iconName?: CustomIconNames;
     setText: (value: string) => void;
     assignRef?: RefObject<TextInput>;
@@ -21,12 +24,14 @@ const AppTextInput: FC<AppTextInputProps> = ({
     iconSize,
     text,
     isTask,
+    isList,
     setText,
     iconName,
     isPassword = false,
     textPadding = 12,
     preffixPadding = 16,
     assignRef,
+    squareColor,
     ...otherProps
 }) => {
 
@@ -39,7 +44,7 @@ const AppTextInput: FC<AppTextInputProps> = ({
         <Pressable onPress={() => assignRef?.current?.focus() ?? customRef.current?.focus()} >
             <View style={[
                 styles.container,
-                focused ? (isTask ? styles.taskTextField : styles.focusedTextField) : null,
+                focused ? (isTask ? [styles.taskTextField, {}] : styles.focusedTextField) : null,
             ]}>
                 {
                     iconName && <Ionicons
@@ -53,8 +58,14 @@ const AppTextInput: FC<AppTextInputProps> = ({
                         ]}
                     />
                 }
+
+                {
+                    isList &&
+                    <View style={[{ backgroundColor: squareColor }, styles.square]} />
+                }
+
+
                 <TextInput
-                    {...otherProps}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     ref={assignRef ?? customRef}
@@ -64,8 +75,8 @@ const AppTextInput: FC<AppTextInputProps> = ({
                     selectionColor={Colors.selectionColor}
                     cursorColor={Colors.textColor1}
                     secureTextEntry={passwordHidden}
-                    style={[styles.textInputStyle, { paddingLeft: textPadding }]}
-                    
+                    style={[styles.textInputStyle, isList && styles.listInputStyle, { paddingLeft: textPadding }]}
+                    {...otherProps}
                 />
 
                 {
@@ -99,9 +110,8 @@ export default AppTextInput;
 const styles = StyleSheet.create({
 
     focusedTextField: {
-        borderWidth: 1,
-        borderColor: Colors.primary,
-        backgroundColor: Colors.activeInput,
+        // borderWidth: 1,
+        backgroundColor: Colors.listTextBackground,
     },
 
     taskTextField: {
@@ -111,10 +121,12 @@ const styles = StyleSheet.create({
 
     textInputStyle: {
         fontFamily: weight.L,
-        paddingVertical: verticalScale(13),
-        fontSize: 16.5,
+        color: Colors.textColor4,
+        paddingTop: ms(7),
+        paddingBottom: ms(9),
+        fontSize: ms(12),
         flex: 1,
-        paddingRight: 8,
+        paddingRight: ms(8),
     },
 
     container: {
@@ -124,12 +136,28 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: "hidden",
         borderColor: Colors.divider,
-        borderWidth: 1,
+        borderWidth: StyleSheet.hairlineWidth, // 1
+    },
+
+    listTextField: {
+
+    },
+
+    listInputStyle: {
+        fontFamily: weight.R,
     },
 
     prefixIcon: {
         alignItems: "center",
         color: addOpacity(Colors.hintTextColor, 0.9),
+    },
+
+    square: {
+        width: ms(14),
+        height: ms(14),
+        borderRadius: 4,
+        marginRight: ms(10),
+        marginLeft: ms(13),
     },
 
 });

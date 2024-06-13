@@ -1,23 +1,28 @@
 import { Pressable, StyleSheet, TextInput, View } from 'react-native'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { TaskScreenProps } from '@/app/utils/types'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { AppButton, AppScrollView, AppText, AppTextInput } from '@/app/common';
 import { Colors, weight } from '@/app/utils';
+import useCreateTask from '@/app/hooks/useCreateTask';
+import useUpdateTask from '@/app/hooks/useUpdateTask';
 
 
-const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
+const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBack } }) => {
+    const isUpdate = params !== undefined;
 
-    const [task, setTask] = useState<string>('');
-    const [description, setDescription] = useState('')
+    const [title, setTitle] = useState<string>(params?.title ?? '');
+    const [description, setDescription] = useState(params?.description ?? '');
 
     const taskRef = useRef<TextInput>(null);
     const descriptionRef = useRef<TextInput>(null);
 
     const [selected, setSelected] = useState<string>("");
 
+    const { createTask, isCreatingTask } = useCreateTask();
+    const { updateTask, isUpdatingTask } = useUpdateTask();
 
     const data = [
         { key: '1', value: 'Personal' },
@@ -26,6 +31,26 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
         { key: '4', value: 'School' },
         { key: '5', value: 'Home' }
     ];
+
+    const onPress = () => {
+        if (isUpdate) {
+
+            const updatedTitle = params?.title === title ? undefined : title;
+            const updatedDesc = params?.description === description ? undefined : description
+
+            updateTask({
+                data: { _id: params._id, title: updatedTitle, description: updatedDesc },
+                next: goBack,
+            })
+
+            return;
+        }
+
+        createTask({
+            data: { title, description },
+            next: goBack,
+        })
+    }
 
     useEffect(() => {
         // Focus the text input when the screen mounts
@@ -43,7 +68,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
                             Task:
                         </AppText>
 
-                        <Pressable>
+                        <Pressable onPress={goBack}>
                             <Ionicons
                                 size={28}
                                 name={"close"}
@@ -58,11 +83,10 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
                         <AppTextInput
                             assignRef={taskRef}
                             placeholder="Add New Task"
-                            text={task}
-                            setText={setTask}
+                            text={title}
+                            setText={setTitle}
                             returnKeyType="next"
                             isTask={true}
-                             
                             onSubmitEditing={() => descriptionRef.current?.focus()}
                         />
 
@@ -72,7 +96,6 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
                             text={description}
                             setText={setDescription}
                             isTask={true}
-                            
                             multiline
                             textAlignVertical='top'
                             numberOfLines={6}
@@ -117,7 +140,12 @@ const TaskScreen: FC<TaskScreenProps> = ({ navigation }) => {
                 </View>
             </AppScrollView>
 
-            <AppButton style={{position: 'absolute', bottom: 0}} buttonText={'Create'}/>
+            <AppButton
+                onPress={onPress}
+                style={{ position: 'absolute', bottom: 0 }}
+                buttonText={isUpdate ? 'Update' : 'Create'}
+                isLoading={isUpdate ? isUpdatingTask : isCreatingTask}
+            />
         </SafeAreaView>
     )
 }

@@ -17,15 +17,16 @@ const taskSlice = createSlice({
     reducers: {
         updateTasks: (state, action: PayloadAction<Task[]>) => {
             state.data.push(...action.payload);
-        } 
+        }
     },
 
     extraReducers(builder) {
+        
         builder.addMatcher(
             tasksApi.endpoints.getAll.matchFulfilled,
             (state, { payload }) => {
 
-                console.log(payload);
+                //console.log(` Match fulfilled for the Get All Endpoint ${JSON.stringify(payload)}`);
 
                 payload.forEach((newTask) => {
 
@@ -42,7 +43,7 @@ const taskSlice = createSlice({
     },
 });
 
-export const selectTasks = (state : any) => state.task.data;
+export const selectTasks = (state : RootState) => state.task.data;
 
 export const { updateTasks } = taskSlice.actions;
 

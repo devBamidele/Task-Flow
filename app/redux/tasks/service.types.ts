@@ -1,19 +1,28 @@
 
-export interface BaseTask {
-    title : string,
-    description : string,
+interface BaseResponse {
+    message: string,
+}
+interface BaseTask {
+    title: string,
+    description: string,
 }
 
-export interface AddTaskQuery extends BaseTask{}
+export interface AddTaskPayload extends BaseTask { }
 
-export interface Task extends BaseTask{
+export interface Task extends BaseTask {
     _id: string
 }
 
-export interface TaskResponse {
-    tasks : Task[],
+export interface UpdateTaskPayload {
+    _id: string,
+    title?: string,
+    description?: string,
 }
 
-export interface AddTaskResponse {
-    message : string
+export interface TaskResponse {
+    tasks: Task[],
 }
+
+export interface AddTaskResponse extends BaseResponse { }
+
+export interface UpdateTaskResponse extends BaseResponse { }
