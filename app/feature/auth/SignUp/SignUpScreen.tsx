@@ -1,22 +1,47 @@
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SignUpScreenProps, weight } from '@/app/utils/types'
 import Colors from '@/app/utils/colors'
-import { verticalScale } from '@/app/utils/metric'
-import { AppButton, AppScrollView, AppText, AppTextInput } from '@/app/common'
+import { horizontalScale, verticalScale } from '@/app/utils/metric'
+import { AppButton, AppScrollView, AppText, AppTextInput, showToast } from '@/app/common'
+import { ms, mvs } from 'react-native-size-matters'
+import { useForm } from './useForm'
+import useSignupUser from '@/app/hooks/useSignupUser'
 
-const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } }) => {
+const SignUpScreen: FC<SignUpScreenProps> = (props) => {
 
-  const [name, setName] = useState<string>('')
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const { navigation: { navigate, goBack } } = props;
 
-  
-  const emailInputRef = useRef<TextInput>(null);
-  const passwordInputRef = useRef<TextInput>(null);
-  const confirmPasswordInputRef = useRef<TextInput>(null);
+  const {
+    name, email, password, isNameValid, isEmailValid, confirmPassword,
+    setConfirmPassword, isPasswordValid, emailInputRef, isPasswordMatch,
+    confirmPasswordInputRef, passwordInputRef, listener,
+    listen, checkCredentials, setEmail, setName,
+    setPassword, clearForm
+  } = useForm();
+
+  const { signUpUser, isLoading } = useSignupUser();
+
+  useEffect(() => {
+    if (listener) {
+      checkCredentials();
+    }
+  }, [name, email, password, confirmPassword, listener]);
+
+
+  const onSubmit = () => {
+    listen();
+
+    if (checkCredentials()) {
+      signUpUser({
+        data: { name : name.trim(), email, password },
+        next: () => { clearForm(); goBack() },
+      })
+    } 
+  }
+
+
 
   return (
     <SafeAreaView style={styles.mainView}>
@@ -28,80 +53,104 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
               fontWeight={weight.M}
               numberOfLines={2}
               style={styles.headerText}
-            >
-              Sign Up
-            </AppText>
+            >Sign Up</AppText>
 
             <AppText
               fontWeight={weight.L}
-              style={[styles.secondaryText, { marginLeft: 10 }]}>
-              Fill out your details below
+              style={[styles.secondaryText]}
+            >Fill out your details below
             </AppText>
+
           </View>
 
 
           <View style={styles.textInputView}>
 
-            <AppTextInput
-              placeholder="Name"
-              text={name}
-              setText={setName}
-              keyboardType="name-phone-pad"
-              iconName='person-outline'
-              returnKeyType='next'
-              onSubmitEditing={() => emailInputRef.current?.focus()}
-            />
+            <View>
+              <AppTextInput
+                placeholder="Name"
+                text={name}
+                setText={setName}
+                keyboardType="name-phone-pad"
+                returnKeyType='next'
+                onSubmitEditing={() => emailInputRef.current?.focus()}
+                editable={!isLoading}
+              />
+              {isNameValid &&
+                <AppText fontWeight={weight.L} style={styles.errorText}>
+                  {isNameValid}
+                </AppText>}
+            </View>
 
-            <AppTextInput
-              placeholder="Email"
-              text={email}
-              setText={setEmail}
-              iconName='mail-outline'
-              returnKeyType='next'
-              keyboardType="email-address"
-              onSubmitEditing={() => passwordInputRef.current?.focus()}
-              assignRef={emailInputRef}
-            />
+            <View>
+              <AppTextInput
+                placeholder="Email"
+                text={email}
+                setText={setEmail}
+                returnKeyType='next'
+                keyboardType="email-address"
+                onSubmitEditing={() => passwordInputRef.current?.focus()}
+                assignRef={emailInputRef}
+                editable={!isLoading}
+              />
 
-            <AppTextInput
-              iconSize={21}
-              placeholder="Password"
-              text={password}
-              setText={setPassword}
-              isPassword={true}            
-              iconName='lock-closed-outline'
-              returnKeyType='next'
-              onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
-              assignRef={passwordInputRef}
-            />
+              {!isEmailValid &&
+                <AppText fontWeight={weight.L} style={styles.errorText}>
+                  Email is invalid
+                </AppText>}
+            </View>
 
-            <AppTextInput
-              iconSize={21}
-              placeholder="Confirm Password"
-              text={confirmPassword}
-              setText={setConfirmPassword}
-              secureTextEntry
-              iconName='lock-closed-outline'
-              isPassword={true}
-              assignRef={confirmPasswordInputRef}
-            />
+            <View>
+              <AppTextInput
+                placeholder="Password"
+                text={password}
+                setText={setPassword}
+                isPassword={true}
+                returnKeyType='next'
+                onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
+                assignRef={passwordInputRef}
+                editable={!isLoading}
+              />
+
+              {isPasswordValid &&
+                <AppText fontWeight={weight.L} style={styles.errorText}>
+                  {isPasswordValid}
+                </AppText>}
+            </View>
+
+            <View>
+              <AppTextInput
+                placeholder="Confirm Password"
+                text={confirmPassword}
+                setText={setConfirmPassword}
+                
+                isPassword={true}
+                returnKeyType='done'
+                assignRef={confirmPasswordInputRef}
+                editable={!isLoading}
+              />
+
+              {!isPasswordMatch &&
+                <AppText fontWeight={weight.L} style={styles.errorText}>
+                  Password does not match
+                </AppText>}
+            </View>
 
           </View>
 
           <AppButton
-            onPress={() => navigate('HomeDrawer')}
+            onPress={onSubmit}
             buttonText="Continue"
+            isLoading={isLoading}
           />
 
           <View style={styles.signView}>
-            <AppText fontWeight={weight.L} style={{ color: Colors.hintTextColor, fontSize: 15.5 }}>
+            <AppText fontWeight={weight.L} style={{ color: Colors.hintTextColor, fontSize: 15}}>
               Already have an account ?
             </AppText>
 
-            <TouchableOpacity activeOpacity={0.6}
-              onPress={goBack}
-            >
-              <AppText fontWeight={weight.M}style={styles.signUpText}>
+            <TouchableOpacity activeOpacity={0.6} onPress={goBack} >
+              <AppText fontWeight={weight.M} style={styles.signUpText}>
                 Login
               </AppText>
             </TouchableOpacity>
@@ -115,7 +164,7 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation: { navigate, goBack } 
 
             <AppText>&</AppText>
 
-            <AppText fontWeight={weight.M} style={styles.policy} >Privacy </AppText>
+            <AppText fontWeight={weight.M} style={styles.policy} >Privacy Policy</AppText>
           </AppText>
 
         </View>
@@ -132,19 +181,19 @@ const styles = StyleSheet.create({
   },
 
   loginTextView: {
-    marginTop: 75,
+    marginTop: mvs(75),
     marginBottom: verticalScale(50),
   },
 
   headerText: {
     color: Colors.textColor1,
     fontSize: 40,
-    marginBottom: 6,
+    marginBottom: mvs(4),
   },
 
   textInputView: {
     paddingHorizontal: 10,
-    gap: 18,
+    gap: 20,
     marginBottom: 16,
   },
 
@@ -159,26 +208,34 @@ const styles = StyleSheet.create({
 
   signUpText: {
     color: Colors.primary,
-    fontSize: 16.5,
+    fontSize: 14,
     padding: 4,
   },
 
   bottomText: {
-    fontSize: 13,
+    fontSize: 12,
     color: Colors.hintTextColor,
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 30,
     marginBottom: 30,
     paddingHorizontal: 20,
   },
 
   policy: {
     color: Colors.textColor1,
-    fontSize: 14
+    fontSize: 12
   },
 
   secondaryText: {
     color: Colors.hintTextColor,
-    fontSize: 14.5
-  }
+    fontSize: 15,
+    marginLeft: ms(8)
+  },
+
+  errorText: {
+    color: Colors.error,
+    fontSize: 12.5,
+    marginLeft: horizontalScale(1),
+    marginTop: mvs(6)
+  },
 })

@@ -1,10 +1,31 @@
-import { loginError } from "../hooks/types";
+import { BaseError, loginError } from "../hooks/types";
 
+
+const nameRegex = /^[a-zA-Z\s'-]+$/;
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 function validateEmail(email: string) {
     return email.trim().length > 0 && emailRegex.test(email);
 }
+
+function validateName(name: string) {
+    const trimmedName = name.trim();
+
+    if (trimmedName.length === 0) {
+        return 'Name cannot be empty';
+    }
+
+    if (trimmedName.length < 2) {
+        return 'Name should be at least 2 characters long';
+    }
+
+    if (!nameRegex.test(trimmedName)) {
+        return 'Name can only contain letters, spaces, hyphens, and apostrophes';
+    }
+
+    return null; // Name is valid
+}
+
 
 function validatePassword(password : string) {
     if (password.length < 8) {
@@ -26,13 +47,13 @@ function validatePassword(password : string) {
     return null; // Password is valid
 }
 
-function isLoginError(error: any): error is loginError {
-    return (error as loginError).data !== undefined;
+function isError<T extends BaseError>(error: any): error is T {
+    return (error as T).data !== undefined;
 }
 
-
 export {
+    validateName,
     validateEmail,
     validatePassword,
-    isLoginError,
+    isError,
 }

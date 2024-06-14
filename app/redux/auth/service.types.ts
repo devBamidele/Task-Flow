@@ -30,7 +30,9 @@ export interface LogoutPayload { }
 
 export interface LogoutResponse { }
 
-export interface RegisterResponse { }
+export interface RegisterResponse {
+    message: string,
+ }
 
 export interface AuthState {
     token: string,

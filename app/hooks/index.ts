@@ -1,4 +1,4 @@
-import useLoginUser from "./useLogin";
+import useLoginUser from "./useLoginUser";
 import { useAppDispatch, useAppSelector } from "./types";
 
 export {

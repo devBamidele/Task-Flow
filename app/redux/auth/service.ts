@@ -23,7 +23,7 @@ export const authenticationApi = api.injectEndpoints({
             query: (body) => ({ url: Endpoints.logout, method: 'POST', body })
         }),
 
-        register: builder.mutation<RegisterResponse, RegisterPayload>({
+        signUp: builder.mutation<RegisterResponse, RegisterPayload>({
             query: (body) => ({ url: Endpoints.register, method: 'POST', body })
         }),
 
@@ -33,5 +33,5 @@ export const authenticationApi = api.injectEndpoints({
 export const {
     useLoginMutation,
     useLogoutMutation,
-    useRegisterMutation
+    useSignUpMutation
 } = authenticationApi

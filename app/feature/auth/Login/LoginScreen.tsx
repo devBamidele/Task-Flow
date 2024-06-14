@@ -8,9 +8,12 @@ import { Colors, LoginScreenProps, horizontalScale, verticalScale } from '@/app/
 import { useForm } from './useForm';
 import { weight } from '@/app/utils/types';
 import { useLoginUser } from '@/app/hooks';
+import { ms, mvs, s } from 'react-native-size-matters';
 
 
-const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } }) => {
+const LoginScreen: FC<LoginScreenProps> = (props) => {
+
+    const { navigation: { navigate, goBack } } = props;
 
     const { email, password, isEmailValid, isPasswordValid,
         passwordInputRef, listener, listen, checkCredentials,
@@ -39,127 +42,122 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation: { navigate, goBack } })
     return (
         <SafeAreaView style={styles.mainView}>
             <AppScrollView>
-                <DismissKeyboard>
-                    <View style={[styles.mainView, { paddingHorizontal: 8 }]}>
+                <View style={[styles.mainView, { paddingHorizontal: 8 }]}>
 
-                        {/* BackButton Component */}
-                        <View style={styles.backButton}>
-                            <Pressable onPress={goBack}>
-                                <Ionicons
-                                    size={26}
-                                    name={"arrow-back-outline"}
-                                    color={Colors.textColor1}
-                                    style={{ padding: 6 }}
-                                />
-                            </Pressable>
-                        </View>
-
-                        {/* Login TextView */}
-                        <View style={styles.loginTextView}>
-                            <AppText
-                                fontWeight={weight.M}
-                                numberOfLines={2}
-                                style={styles.headerText}
-                            >Log In</AppText>
-
-                            <AppText
-                                fontWeight={weight.L}
-                                style={[styles.secondaryText, { marginLeft: 10 }]}
-                            >Enter your email and password below</AppText>
-                        </View>
-
-                        {/* Email / Password form */}
-                        <View style={styles.textInputView}>
-                            <View>
-                                <AppTextInput
-                                    placeholder="Email"
-                                    text={email}
-                                    keyboardType="email-address"
-                                    setText={setEmail}
-                                    iconName='mail-outline'
-                                    returnKeyType='next'
-                                    onSubmitEditing={() => passwordInputRef.current?.focus()}
-                                    editable={!isLoading}
-                                />
-                                {!isEmailValid &&
-                                    <AppText fontWeight={weight.L} style={styles.errorText}>
-                                        Email is invalid
-                                    </AppText>}
-                            </View>
-
-                            <View>
-                                <AppTextInput
-                                    iconSize={21}
-                                    placeholder="Password"
-                                    text={password}
-                                    setText={setPassword}
-                                    isPassword={true}
-                                    iconName='lock-closed-outline'
-                                    assignRef={passwordInputRef}
-                                    editable={!isLoading}
-                                />
-                                {isPasswordValid &&
-                                    <AppText fontWeight={weight.L} style={styles.errorText}>
-                                        {isPasswordValid}
-                                    </AppText>}
-                            </View>
-
-                        </View>
-
-                        {/* Forgot Password Text */}
-                        <View style={{ alignSelf: 'flex-end', marginRight: 4 }}>
-                            <Pressable>
-                                <AppText fontWeight={weight.M} style={styles.forgotPassword}>
-                                    Forgot Password ?
-                                </AppText>
-                            </Pressable>
-                        </View>
-
-
-                        <AppButton
-                            onPress={onSubmit}
-                            buttonText="Continue"
-                            isLoading={isLoading}
-                        />
-
-                        {/* Sign Up View */}
-                        <View style={styles.signView}>
-                            <AppText fontWeight={weight.L} style={styles.secondaryText}>
-                                Don't have an account ?
-                            </AppText>
-                            <TouchableOpacity activeOpacity={0.6}
-                                onPress={() => navigate('SignUp')}
-                            >
-                                <AppText fontWeight={weight.M} style={styles.signUpText}>
-                                    Sign Up
-                                </AppText>
-                            </TouchableOpacity>
-                        </View>
-
-                        {/* Continue View / Divider */}
-                        <View style={styles.continueView}>
-                            <View style={styles.separator} />
-
-                            <View style={{ marginHorizontal: 12 }}>
-                                <AppText fontWeight={weight.M} style={[styles.secondaryText, { fontSize: 14 }]}>
-                                    Or continue with
-                                </AppText>
-                            </View>
-
-                            <View style={styles.separator} />
-                        </View>
-
-                        {/* Google Button */}
-                        <TouchableOpacity activeOpacity={0.6} style={styles.googleButton}>
+                    {/* BackButton Component */}
+                    <View style={styles.backButton}>
+                        <Pressable onPress={goBack}>
                             <Ionicons
-                                size={25}
-                                name="logo-google"
+                                size={26}
+                                name={"arrow-back-outline"}
                                 color={Colors.textColor1}
+                                style={{ padding: s(6) }}
                             />
-                        </TouchableOpacity>
+                        </Pressable>
+                    </View>
+
+                    {/* Login TextView */}
+                    <View style={styles.loginTextView}>
+                        <AppText
+                            fontWeight={weight.M}
+                            numberOfLines={2}
+                            style={styles.headerText}
+                        >Log In</AppText>
+
+                        <AppText
+                            fontWeight={weight.L}
+                            style={styles.secondaryText}
+                        >Enter your email and password below</AppText>
+                    </View>
+
+                    {/* Email / Password form */}
+                    <View style={styles.textInputView}>
+                        <View>
+                            <AppTextInput
+                                placeholder="Email"
+                                text={email}
+                                keyboardType="email-address"
+                                setText={setEmail}
+                                returnKeyType='next'
+                                onSubmitEditing={() => passwordInputRef.current?.focus()}
+                                editable={!isLoading}
+                            />
+                            {!isEmailValid &&
+                                <AppText fontWeight={weight.L} style={styles.errorText}>
+                                    Email is invalid
+                                </AppText>}
+                        </View>
+
+                        <View>
+                            <AppTextInput
+                                placeholder="Password"
+                                text={password}
+                                setText={setPassword}
+                                isPassword={true}
+                                assignRef={passwordInputRef}
+                                editable={!isLoading}
+                            />
+                            {isPasswordValid &&
+                                <AppText fontWeight={weight.L} style={styles.errorText}>
+                                    {isPasswordValid}
+                                </AppText>}
+                        </View>
 
                     </View>
-                </DismissKeyboard>
+
+                    {/* Forgot Password Text */}
+                    <View style={{ alignSelf: 'flex-end', marginRight: 4 }}>
+                        <Pressable>
+                            <AppText fontWeight={weight.M} style={styles.forgotPassword}>
+                                Forgot Password ?
+                            </AppText>
+                        </Pressable>
+                    </View>
+
+
+                    <AppButton
+                        onPress={onSubmit}
+                        buttonText="Continue"
+                        isLoading={isLoading}
+                    />
+
+                    {/* Sign Up View */}
+                    <View style={styles.signView}>
+                        <AppText fontWeight={weight.L} style={styles.secondaryText}>
+                            Don't have an account ?
+                        </AppText>
+                        <TouchableOpacity activeOpacity={0.6}
+                            onPress={() => { navigate('SignUp'); clearForm() }}
+                        >
+                            <AppText fontWeight={weight.M} style={styles.signUpText}>
+                                Sign Up
+                            </AppText>
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Continue View / Divider */}
+                    <View style={styles.continueView}>
+                        <View style={styles.separator} />
+
+                        <View style={{ marginHorizontal: 6 }}>
+                            <AppText fontWeight={weight.M} style={[styles.secondaryText, { fontSize: 14 }]}>
+                                Or continue with
+                            </AppText>
+                        </View>
+
+                        <View style={styles.separator} />
+                    </View>
+
+                    {/* Google Button */}
+                    <TouchableOpacity activeOpacity={0.6} style={styles.googleButton}>
+                        <Ionicons
+                            size={25}
+                            name="logo-google"
+                            color={Colors.textColor1}
+                        />
+                    </TouchableOpacity>
+
+                </View>
             </AppScrollView>
 
         </SafeAreaView>
@@ -177,9 +175,9 @@ const styles = StyleSheet.create({
 
     errorText: {
         color: Colors.error,
-        fontSize: 13,
-        marginLeft: horizontalScale(10),
-        marginTop: 6
+        fontSize: 12.5,
+        marginLeft: horizontalScale(1),
+        marginTop: mvs(6)
     },
 
     googleButton: {
@@ -187,10 +185,10 @@ const styles = StyleSheet.create({
         marginVertical: 12,
         marginBottom: 32,
         borderColor: Colors.divider,
-        borderWidth: 1,
+        borderWidth: StyleSheet.hairlineWidth,
         paddingHorizontal: 28,
         paddingVertical: 13,
-        borderRadius: 14,
+        borderRadius: 10,
     },
 
     mainView: {
@@ -206,29 +204,19 @@ const styles = StyleSheet.create({
     headerText: {
         color: Colors.textColor1,
         fontSize: 40,
-        marginBottom: 6,
+        marginBottom: mvs(4),
     },
 
     loginTextView: {
-        marginTop: verticalScale(52),
-        marginBottom: verticalScale(50),
+        marginTop: mvs(50),
+        marginBottom: mvs(48),
     },
 
     textInputView: {
         paddingHorizontal: 10,
-        gap: 18,
+        gap: 20,
         marginBottom: 6,
     },
-
-    forgotPassword: {
-        color: Colors.primary,
-        textAlign: "right",
-        marginRight: 4,
-
-        paddingHorizontal: 12,
-        paddingVertical: 8
-    },
-
 
     signView: {
         justifyContent: "center",
@@ -236,12 +224,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: -8,
         marginBottom: 20,
-    },
-
-    signUpText: {
-        color: Colors.primary,
-        fontSize: 15.5,
-        padding: 4,
     },
 
     separator: {
@@ -253,7 +235,7 @@ const styles = StyleSheet.create({
 
     continueView: {
         flexDirection: "row",
-        marginHorizontal: 32,
+        marginHorizontal: 12,
         paddingBottom: verticalScale(12),
         paddingTop: verticalScale(17)
     },
@@ -261,6 +243,22 @@ const styles = StyleSheet.create({
 
     secondaryText: {
         color: Colors.hintTextColor,
-        fontSize: 14.5
-    }
+        fontSize: 15,
+        marginLeft: ms(8)
+    },
+
+    signUpText: {
+        color: Colors.primary,
+        fontSize: 14,
+        padding: 4,
+    },
+
+    forgotPassword: {
+        color: Colors.primary,
+        textAlign: "right",
+
+        fontSize: 13,
+        paddingHorizontal: 12,
+        paddingVertical: 8
+    },
 })

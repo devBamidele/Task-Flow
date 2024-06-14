@@ -1,10 +1,11 @@
-import React, { FC, ForwardedRef, RefObject, useRef, useState } from 'react';
+import React, { FC, RefObject, useRef, useState } from 'react';
 import { TextInput, TextInputProps, StyleSheet, View, Pressable } from 'react-native';
 import Colors, { addOpacity } from '../../utils/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { CustomIconNames, weight } from '../../utils/types';
-import { horizontalScale, verticalScale } from '../../utils/metric';
+import { horizontalScale } from '../../utils/metric';
 import { ms } from 'react-native-size-matters';
+import { getFontFamily } from '@/app/utils';
 
 interface AppTextInputProps extends TextInputProps {
     text: string;
@@ -28,7 +29,7 @@ const AppTextInput: FC<AppTextInputProps> = ({
     setText,
     iconName,
     isPassword = false,
-    textPadding = 12,
+    textPadding = 16,
     preffixPadding = 16,
     assignRef,
     squareColor,
@@ -59,11 +60,7 @@ const AppTextInput: FC<AppTextInputProps> = ({
                     />
                 }
 
-                {
-                    isList &&
-                    <View style={[{ backgroundColor: squareColor }, styles.square]} />
-                }
-
+                {isList && <View style={[{ backgroundColor: squareColor }, styles.square]} />}
 
                 <TextInput
                     onFocus={() => setFocused(true)}
@@ -84,16 +81,17 @@ const AppTextInput: FC<AppTextInputProps> = ({
                     <View style={{ alignItems: "center" }}>
                         <Pressable onPress={() => setPasswordHidden(!passwordHidden)} >
                             <Ionicons
-                                size={23}
+                                size={22.5}
                                 name={passwordHidden ? "eye-outline" : "eye-off-outline"}
                                 color={Colors.textColor1}
                                 style={[
                                     styles.prefixIcon,
-                                    focused && { color: Colors.primary },
-                                    text.length != 0 && !focused && { color: Colors.textColor1 },
+                                    focused && { color: Colors.textColor4 },
+                                    text.length != 0 && !focused && { color: Colors.textColor4 },
                                     {
-                                        marginRight: horizontalScale(6),
-                                        padding: 12,
+                                        marginRight: horizontalScale(4),
+                                        paddingHorizontal: 8,
+                                        paddingVertical: 4,
                                     }
                                 ]}
                             />
@@ -110,7 +108,6 @@ export default AppTextInput;
 const styles = StyleSheet.create({
 
     focusedTextField: {
-        // borderWidth: 1,
         backgroundColor: Colors.listTextBackground,
     },
 
@@ -119,12 +116,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
 
+    extraPadding: {
+        paddingTop: ms(11),
+        paddingBottom: ms(10),
+    },
+
     textInputStyle: {
-        fontFamily: weight.L,
+        fontFamily: getFontFamily(weight.L),
         color: Colors.textColor4,
-        paddingTop: ms(7),
-        paddingBottom: ms(9),
-        fontSize: ms(12),
+        paddingTop: 12,
+        paddingBottom: 12,
+        fontSize: 16,
         flex: 1,
         paddingRight: ms(8),
     },
@@ -133,15 +135,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "center",
-        borderRadius: 10,
+        borderRadius: 8,
         overflow: "hidden",
         borderColor: Colors.divider,
         borderWidth: StyleSheet.hairlineWidth, // 1
     },
 
-    listTextField: {
-
+    placeholderContainer: {
+        width: 24,
+        height: 24,
+        backgroundColor: 'transparent', // Makes the component see-through
     },
+
 
     listInputStyle: {
         fontFamily: weight.R,
@@ -149,7 +154,7 @@ const styles = StyleSheet.create({
 
     prefixIcon: {
         alignItems: "center",
-        color: addOpacity(Colors.hintTextColor, 0.9),
+        color: addOpacity(Colors.hintTextColor, 0.7),
     },
 
     square: {

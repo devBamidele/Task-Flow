@@ -1,10 +1,10 @@
 import { useLoginMutation } from "../redux/auth/service";
-import showToast from "../common/Toast/showToast";
 import { FetchError, loginError, loginUserParams } from "./types";
 import { updateUserData } from "../redux/user/slice";
 import { updateTokens } from "../redux/auth/slice";
 import { useAppDispatch } from "./types";
-import { isLoginError } from "../utils";
+import { isError } from "../utils/helpers";
+import showToast from "../common/Toast/showToast";
 
 const useLoginUser = () => {
 
@@ -30,7 +30,7 @@ const useLoginUser = () => {
 
                 console.log(JSON.stringify(err))
 
-                if (isLoginError(err)) {
+                if (isError(err)) {
                     showToast({
                         title: 'Oops',
                         message: err.data.error,

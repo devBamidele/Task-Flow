@@ -2,7 +2,7 @@ import { StyleSheet, View, Image, Dimensions } from 'react-native'
 import React, { FC } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppButton, AppScrollView, AppText } from '../../common';
-import { Colors, verticalScale, weight } from '../../utils';
+import { Colors, weight } from '../../utils';
 import { WelcomeScreenProps } from '../../utils/types';
 import { ms, mvs } from 'react-native-size-matters';
 
@@ -38,7 +38,7 @@ const WelcomeScreen: FC<WelcomeScreenProps> = (props) => {
 
                 </View>
 
-                <View style={{ flexDirection: "row", }}>
+                <View style={{ flexDirection: "row" }}>
                     <AppButton
                         onPress={() => navigate('Login')}
                         buttonText="Let's start"
@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
 
     subText: {
         textAlign: "center",
-        fontSize: ms(13),
+        fontSize: ms(13, 0.6),
         color: Colors.hintTextColor,
-        paddingHorizontal: ms(15),
+        paddingHorizontal: '5%',
         marginTop: mvs(26),
         marginBottom: mvs(10),
     },

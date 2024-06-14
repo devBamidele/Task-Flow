@@ -16,7 +16,7 @@ export default function showToast(props: ToastProps) {
         type,
         text1: title,
         text2: message,
-        position: 'bottom',
+        position: 'top',
         visibilityTime: duration,
         bottomOffset: 30,
     });

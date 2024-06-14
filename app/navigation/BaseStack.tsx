@@ -25,18 +25,19 @@ export default function BaseStack() {
             contentStyle: { backgroundColor: Colors.white },
           }}
         >
-          {loggedIn ? (
-            <Stack.Group>
-              <Stack.Screen name="HomeDrawer" component={HomeDrawer} />
-            </Stack.Group>
-          ) : (
-            
-            <Stack.Group screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Welcome" component={WelcomeScreen} />
-              <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="SignUp" component={SignUpScreen} />
-            </Stack.Group>
-          )}
+          {
+            loggedIn ? (
+              <Stack.Group>
+                <Stack.Screen name="HomeDrawer" component={HomeDrawer} />
+              </Stack.Group>
+            ) : (
+
+              <Stack.Group screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Welcome" component={WelcomeScreen} />
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="SignUp" component={SignUpScreen} />
+              </Stack.Group>
+            )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
