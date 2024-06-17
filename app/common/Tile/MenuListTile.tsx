@@ -1,8 +1,8 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import React, { FC } from 'react';
-import { Colors, addOpacity, weight } from '@/app/utils';
+import { Colors, weight } from '@/app/utils';
 import AppText from '../Text/AppText';
-import { ScaledSheet, ms, s, vs } from 'react-native-size-matters';
+import { ScaledSheet, ms } from 'react-native-size-matters';
 
 interface MenuListTileProps {
     title: string;
@@ -26,7 +26,7 @@ const MenuListTile: FC<MenuListTileProps> = (props) => {
                 <View style={styles.row}>
                     <View style={[styles.square, { backgroundColor: color }]} />
                     <AppText
-                        fontWeight={isSelected ? weight.Sb : weight.R}
+                        fontWeight={isSelected ? weight.M : weight.R}
                         style={styles.tileText}>
                         {title}
                     </AppText>

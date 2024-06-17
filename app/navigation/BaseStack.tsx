@@ -16,6 +16,8 @@ const Stack = createNativeStackNavigator<BaseStackParamList>();
 export default function BaseStack() {
   const loggedIn = useAppSelector(isLoggedIn);
 
+ // console.log(`There has been a login change: ${loggedIn}`);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>

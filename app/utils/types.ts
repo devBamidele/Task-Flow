@@ -50,7 +50,7 @@ export {
 };
 
 // Other exports 
-type CustomIconNames = "mail-outline" | "lock-closed-outline" | "person-outline" | "add-outline";
+type CustomIconNames = "mail-outline" | "lock-closed-outline" | "person-outline" | "add-outline" | "add";
 export type { CustomIconNames };
 
 export enum weight {
@@ -60,4 +60,10 @@ export enum weight {
   R = 'Regular',
   T = 'Thin',
   Sb = 'SemiBold',
+}
+
+export interface Tile {
+  title: string;
+  count: number;
+  color: string;
 }

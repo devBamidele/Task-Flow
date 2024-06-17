@@ -5,6 +5,7 @@ import AppText from '../Text/AppText'
 import { Colors, TodayScreenProps, addOpacity, weight } from '@/app/utils'
 import { Task } from '@/app/redux/tasks'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ms } from 'react-native-size-matters'
 
 interface AppTileProps extends TodayScreenProps {
     item: Task,
@@ -22,11 +23,13 @@ const AppTile: FC<AppTileProps> = ({ item, index, navigation }) => {
     return (
         <Pressable style={styles.container} onPress={onPress} >
 
-            <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+            <Pressable style={styles.checkBoxPressable} onPress={() => setChecked(!isChecked)} >
+                <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+
+            </Pressable>
 
             <View style={{ marginTop: 2, gap: 4, flex: 1, flexShrink: 1 }}>
                 <AppText
-                    fontWeight={weight.M}
                     numberOfLines={1}
                     style={styles.title}
                     key={item._id}
@@ -43,7 +46,7 @@ const AppTile: FC<AppTileProps> = ({ item, index, navigation }) => {
                 size={22}
                 style={{ marginRight: 6, marginTop: 6 }}
                 name={"arrow-forward-outline"}
-                color={Colors.textColor3}
+                color={Colors.textColor4}
             />
         </Pressable>
     )
@@ -55,31 +58,33 @@ const styles = StyleSheet.create({
 
     desc: {
         color: addOpacity(Colors.black, 0.5),
-        fontSize: 13,
-
+        fontSize: ms(10),
     },
 
     title: {
-        fontSize: 15.5,
-        color: addOpacity(Colors.black, 0.8),
-
+        fontSize: ms(12),
+        color: Colors.textColor4,
     },
 
     container: {
         flexDirection: 'row',
         alignItems: "flex-start",
         marginHorizontal: 4,
-        justifyContent: "space-between",
         marginVertical: 5,
         paddingBottom: 4
     },
 
     checkbox: {
-        margin: 8,
-        marginRight: 12,
         borderColor: Colors.divider,
         borderRadius: 4,
-        borderWidth: 1.5,
+        borderWidth: StyleSheet.hairlineWidth * 1.5,
     },
+
+    checkBoxPressable: {
+        paddingTop: 7,
+        paddingLeft: 6,
+        paddingRight: 12,
+        paddingBottom: 15,
+    }
 
 })

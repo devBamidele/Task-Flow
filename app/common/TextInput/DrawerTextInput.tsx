@@ -1,86 +1,64 @@
-import React, { FC, RefObject, useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { TextInput, TextInputProps, StyleSheet, View, Pressable } from 'react-native';
 import Colors, { addOpacity } from '../../utils/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { CustomIconNames, weight } from '../../utils/types';
 import { horizontalScale } from '../../utils/metric';
-import { ms } from 'react-native-size-matters';
+import { ms, s } from 'react-native-size-matters';
 import { getFontFamily } from '@/app/utils';
 
-interface AppTextInputProps extends TextInputProps {
+interface DrawerTextInputProps extends TextInputProps {
     text: string;
-    isList?: boolean,
     iconSize?: number
-    isPassword?: boolean,
-    textPadding?: number,
     preffixPadding?: number
     squareColor?: string,
-    iconName?: CustomIconNames;
+    iconName: CustomIconNames;
     setText: (value: string) => void;
-    assignRef?: RefObject<TextInput>;
 }
 
-const AppTextInput: FC<AppTextInputProps> = ({
+const DrawerTextInput: FC<DrawerTextInputProps> = ({
     iconSize,
     text,
-    isList,
     setText,
     iconName,
-    isPassword = false,
-    textPadding = 16,
     preffixPadding = 16,
-    assignRef,
     squareColor,
     ...otherProps
 }) => {
 
     const [focused, setFocused] = useState(false);
-    const [passwordHidden, setPasswordHidden] = useState(isPassword);
-
     const customRef = useRef<TextInput>(null);
 
     return (
-        <Pressable onPress={() => assignRef?.current?.focus() ?? customRef.current?.focus()} >
-            <View style={[
-                styles.container,
-                focused ? styles.focusedTextField : null,
-            ]}>
-                {
-                    iconName && <Ionicons
-                        size={iconSize ?? 22}
-                        name={iconName}
-                        style={[
-                            styles.prefixIcon,
-                            focused && { color: Colors.primary },
-                            text.length != 0 && !focused && { color: Colors.textColor1 },
-                            { paddingLeft: preffixPadding }
-                        ]}
-                    />
-                }
+        <Pressable onPress={() => customRef.current?.focus()} >
+            <View style={[styles.container, focused && styles.focusedTextField]}>
 
-                {isList && <View style={[{ backgroundColor: squareColor }, styles.square]} />}
+                <Ionicons
+                    size={25}
+                    name={iconName}
+                    style={styles.icon}
+                />
 
                 <TextInput
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
-                    ref={assignRef ?? customRef}
+                    ref={customRef}
                     onChangeText={setText}
                     value={text}
-                    placeholderTextColor={Colors.hintTextColor}
+                    placeholderTextColor={Colors.textColor4}
                     selectionColor={Colors.selectionColor}
-                    cursorColor={Colors.textColor1}
-                    secureTextEntry={passwordHidden}
-                    style={[styles.textInputStyle, isList && styles.listInputStyle, { paddingLeft: textPadding }]}
+                    cursorColor={Colors.textColor4}
+                    style={[styles.textInputStyle]}
                     {...otherProps}
                 />
 
                 {
-                    isPassword &&
-                    <View style={{ alignItems: "center" }}>
-                        <Pressable onPress={() => setPasswordHidden(!passwordHidden)} >
+                    text.length > 0 &&
+                    <View>
+                        <Pressable onPress={() => { }} >
                             <Ionicons
                                 size={22.5}
-                                name={passwordHidden ? "eye-outline" : "eye-off-outline"}
+                                name={"checkmark"}
                                 color={Colors.textColor1}
                                 style={[
                                     styles.prefixIcon,
@@ -101,7 +79,7 @@ const AppTextInput: FC<AppTextInputProps> = ({
     );
 };
 
-export default AppTextInput;
+export default DrawerTextInput;
 
 const styles = StyleSheet.create({
 
@@ -109,14 +87,20 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.listTextBackground,
     },
 
+    icon: {
+        padding: s(5),
+        color: Colors.textColor3,
+    },
+
     textInputStyle: {
         fontFamily: getFontFamily(weight.L),
         color: Colors.textColor4,
-        paddingTop: 12,
-        paddingBottom: 12,
-        fontSize: 16,
+        paddingTop: 10,
+        paddingBottom: 10,
+        fontSize: ms(12),
         flex: 1,
         paddingRight: ms(8),
+        //paddingLeft: 4,
     },
 
     container: {
@@ -125,8 +109,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         borderRadius: 8,
         overflow: "hidden",
-        borderColor: Colors.divider,
-        borderWidth: StyleSheet.hairlineWidth, // 1
     },
 
     listInputStyle: {

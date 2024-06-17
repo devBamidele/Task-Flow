@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { onlineState } from '@/app/redux/user/slice';
 import { api } from '@/app/redux/api';
 import { tasksApi } from '@/app/redux/tasks/service';
+import { ms, mvs } from 'react-native-size-matters';
 
 
 const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
@@ -47,7 +48,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                             size={28}
                             name={"menu-outline"}
                             color={Colors.textColor1}
-                            style={{ padding: 6 }}
+                            style={{ paddingLeft: 4 }}
                         />
                     </Pressable>
 
@@ -57,7 +58,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                         </AppText>
 
                         <View style={styles.undoneCount}>
-                            <AppText style={{ fontSize: 15 }}>
+                            <AppText style={{ fontSize: ms(9) }}>
                                 5
                             </AppText>
                         </View>
@@ -65,7 +66,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                 </View>
 
 
-                <View style={{ paddingHorizontal: 12, marginTop: 24 }}>
+                <View style={{ paddingHorizontal: mvs(8), marginTop: ms(14) }}>
                     <AddTaskButton onPress={() => navigation.navigate('Task')} buttonText='Add New Task' />
                 </View>
 
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     },
 
     backButton: {
-        marginTop: 20,
+        marginTop: 12,
         marginLeft: 8,
         flexDirection: "row",
         justifyContent: "flex-start",
@@ -141,19 +142,22 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         paddingVertical: 3,
         borderRadius: 8,
-        marginLeft: 4
+        marginLeft: 4,
+        marginBottom: 4,
     },
 
     headerText: {
-        fontSize: 27,
-        marginLeft: 5,
+        fontSize: ms(22),
+        marginLeft: 4,
+        marginBottom: 4,
     },
 
     seperator: {
         height: StyleSheet.hairlineWidth,
         backgroundColor: Colors.divider,
         marginHorizontal: 6,
-        marginVertical: 0
+        marginBottom: 2,
+
     },
 
     checkbox: {

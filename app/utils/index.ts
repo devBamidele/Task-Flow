@@ -10,4 +10,4 @@ export { fontConfig, getFontFamily, EnvVars } from '@/app/utils/config';
 
 export { addOpacity } from '@/app/utils/colors';
 
-export { weight, BaseStackParamList, WelcomeScreenProps, LoginScreenProps as BaseLoginScreenProps, SignUpScreenProps, TodayScreenProps, TaskScreenProps, CurrentStackParamList, HomeDrawerParamList, CustomIconNames } from '@/app/utils/types';
+export { weight, BaseStackParamList, WelcomeScreenProps, LoginScreenProps as BaseLoginScreenProps, SignUpScreenProps, TodayScreenProps, TaskScreenProps, CurrentStackParamList, HomeDrawerParamList, CustomIconNames, Tile } from '@/app/utils/types';

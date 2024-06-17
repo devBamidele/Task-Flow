@@ -2,8 +2,9 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { FC } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Colors from '@/app/utils/colors';
+import Colors, { addOpacity } from '@/app/utils/colors';
 import AppText from '../Text/AppText';
+import { ms } from 'react-native-size-matters';
 
 type onPress = () => void;
 
@@ -23,7 +24,7 @@ const AddTaskButton: FC<addTaskButtonProps> = ({ onPress, buttonText }) => {
                 <Ionicons
                     size={24}
                     name={"add"}
-                    color={Colors.textColor3} />
+                    color={Colors.textColor4} />
 
                 <AppText
                     style={styles.buttonText}>
@@ -39,9 +40,8 @@ export default AddTaskButton
 
 const styles = StyleSheet.create({
     buttonView: {
-        paddingBottom: 24,
+        paddingBottom: ms(12),
         width: "100%",
-
     },
 
     button: {
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 14,
         borderRadius: 8,
-        borderWidth: 1,
+        borderWidth: StyleSheet.hairlineWidth,
         borderColor: Colors.divider,
         alignItems: "center",
 
@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
 
     buttonText: {
         textAlign: "center",
-        color: Colors.textColor3,
-        fontSize: 16,
+        color: addOpacity(Colors.black, 0.5),
+        fontSize: ms(12),
         marginLeft: 4,
     }
 

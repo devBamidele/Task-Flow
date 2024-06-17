@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
 import { DrawerContentComponentProps, DrawerContentScrollView } from '@react-navigation/drawer';
 import AppText from '../Text/AppText';
-import { Colors, weight } from '@/app/utils';
+import { Colors, Tile, weight } from '@/app/utils';
 import { useAppDispatch } from '@/app/hooks';
 import { loggedOut } from '@/app/redux/auth/slice';
 import { clearUserData } from '@/app/redux/user/slice';
@@ -10,31 +10,40 @@ import MenuListTile from '../Tile/MenuListTile';
 import AppButton from '../Button/AppButton';
 import MenuTaskTile from '../Tile/MenuTaskTile';
 import { ScaledSheet, ms, mvs, s, vs } from 'react-native-size-matters';
-import AppTextInput from '../TextInput/AppTextInput';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { clearTasks } from '@/app/redux/tasks';
+import DrawerTextInput from '../TextInput/DrawerTextInput';
 
 const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
     const dispatch = useAppDispatch();
 
+    const [tiles, setTiles] = useState<Tile[]>([]);
     const [selectedTile, setSelectedTile] = useState<string | null>(null);
+    const [newList, setNewList] = useState("");
 
-    const [color, setColor] = useState<number>(1)
-    const [listName, setListName] = useState<string>('');
 
-    const logout = async () => handleGoogleLogout();
+    const getTilesFromBackend = async () => {
+        // Replace this with your actual backend call
+        return [
+            { title: 'Personal', count: 3, color: 'tomato' },
+            { title: 'Work', count: 6, color: 'plum' },
+            { title: 'List 1', count: 1, color: 'yellow' },
+        ];
+    };
 
-    const confirmLogout = () =>
-        Alert.alert('Confirm Logout', 'Are you sure you want to logout', [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'OK', onPress: logout },
-        ]);
+    useEffect(() => {
+        // Fetch data from the backend
+        // Replace the following with your actual data fetching logic
+        const fetchData = async () => {
+            const data = await getTilesFromBackend();
+            setTiles(data);
+        };
 
-    const handleTilePress = (title: string) => {
-        setSelectedTile(title);
-    }
+        fetchData();
+    }, []);
 
-    async function handleGoogleLogout() {
+
+    const logout = async () => {
         try {
             dispatch(loggedOut());
             dispatch(clearUserData());
@@ -44,6 +53,16 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
         } catch (error) {
             console.log('Google Sign-Out Error: ', error);
         }
+    };
+
+    const confirmLogout = () =>
+        Alert.alert('Confirm Logout', 'Are you sure you want to logout', [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'OK', onPress: logout },
+        ]);
+
+    const handleTilePress = (title: string) => {
+        setSelectedTile(title);
     }
 
     return (
@@ -75,68 +94,25 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
                         </AppText>
 
                         <View style={styles.subMenuSection}>
-                            <MenuListTile
-                                title={'Personal'}
-                                count={3}
-                                color='tomato'
-                                isSelected={selectedTile === 'Personal'}
-                                onPress={handleTilePress}
-                            />
-                            <MenuListTile
-                                title={'Work'}
-                                count={6}
-                                color='plum'
-                                isSelected={selectedTile === 'Work'}
-                                onPress={handleTilePress}
-                            />
-                            <MenuListTile
-                                title={'List 1'}
-                                count={1}
-                                color='yellow'
-                                isSelected={selectedTile === 'List 1'}
-                                onPress={handleTilePress}
-                            />
 
-                            <View style={{ marginLeft: ms(1) }}>
-                                <MenuTaskTile title='Add New List' icon='add' />
-                            </View>
-
-                            <View style={styles.listContainer}>
-
-                                <AppTextInput
-                                    placeholder="List Name"
-                                    placeholderTextColor={Colors.textColor3}
-                                    text={listName}
-                                    keyboardType="email-address"
-                                    setText={setListName}
-                                    returnKeyType='go'
-                                    isList={true}
-                                    textPadding={ms(1)}
-                                    squareColor={tiles[color - 1].color}
+                            {tiles.map((tile) => (
+                                <MenuListTile
+                                    key={tile.title}
+                                    title={tile.title}
+                                    count={tile.count}
+                                    color={tile.color}
+                                    isSelected={selectedTile === tile.title}
+                                    onPress={() => handleTilePress(tile.title)}
                                 />
+                            ))}
 
-                                <ScrollView
-                                    horizontal={true}
-                                    showsHorizontalScrollIndicator={false}
-                                    style={styles.scrollView}
-                                >
-                                    {tiles.map(
-                                        tile => (
-                                            <TouchableOpacity
-                                                key={tile.id}
-                                                onPress={() => setColor(tile.id)}
-                                                activeOpacity={0.7}
-                                            >
-                                                <View
-                                                    style={[
-                                                        styles.squareSelector,
-                                                        tile.id === color && { borderColor: Colors.divider }]} >
-                                                    <View style={[styles.square, { backgroundColor: tile.color }]} />
-                                                </View>
-                                            </TouchableOpacity>
-                                        ))}
-                                </ScrollView>
-
+                            <View>
+                                <DrawerTextInput
+                                    iconName='add'
+                                    placeholder="Add New List"
+                                    text={newList}
+                                    setText={setNewList}
+                                />
                             </View>
 
                             <View style={styles.seperator} />
@@ -163,17 +139,6 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
         </KeyboardAvoidingView>
     );
 };
-
-const tiles = [
-    { id: 1, color: '#FF6B6B' },
-    { id: 2, color: '#DA77F2' },
-    { id: 3, color: '#F4F4F4' },
-    { id: 4, color: '#5C7CFA' },
-    { id: 5, color: '#66D9E8' },
-    { id: 6, color: '#8CE99A' },
-    { id: 7, color: '#FFD43B' },
-    { id: 8, color: '#FF922B' },
-];
 
 const styles = ScaledSheet.create({
     container: {

@@ -86,7 +86,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                             text={title}
                             setText={setTitle}
                             returnKeyType="next"
-                            isTask={true}
+                           
                             onSubmitEditing={() => descriptionRef.current?.focus()}
                         />
 
@@ -95,7 +95,6 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                             placeholder="Description"
                             text={description}
                             setText={setDescription}
-                            isTask={true}
                             multiline
                             textAlignVertical='top'
                             numberOfLines={6}

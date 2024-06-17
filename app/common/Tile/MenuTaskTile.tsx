@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { View } from 'react-native'
 import React, { FC } from 'react'
-import { Colors, addOpacity } from '@/app/utils'
+import { Colors } from '@/app/utils'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AppText from '../Text/AppText'
-import { ScaledSheet, TextStyle, ms, mvs, s, vs } from 'react-native-size-matters';
+import { ScaledSheet, ms, mvs, s } from 'react-native-size-matters';
 
 type iconTypes = "add" |
     "list-outline" |

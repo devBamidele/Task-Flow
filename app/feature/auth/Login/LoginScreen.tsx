@@ -153,7 +153,6 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
 
                     {/* Google Button */}
                     <TouchableOpacity onPress={handleGoogleLogin} activeOpacity={0.6} style={styles.googleButton}>
-
                         {
                             isGloading ?
                                 <ActivityIndicator
