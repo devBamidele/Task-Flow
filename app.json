@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Todo",
+    "name": "Task Flow",
     "slug": "Todo",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,9 +15,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bamidele_ajewole.task_flow"
     },
     "android": {
+      "package": "com.bamidele_ajewole.task_flow",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -29,6 +31,14 @@
     "plugins": [
       "expo-font",
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "09554fd3-daf8-44ac-823c-27c29c64d71c"
+      }
+    }
   }
 }

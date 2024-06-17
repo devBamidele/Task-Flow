@@ -1,4 +1,4 @@
-import { BaseError, loginError } from "../hooks/types";
+import { BaseError, GoogleSignInError, loginError } from "../hooks/types";
 
 
 const nameRegex = /^[a-zA-Z\s'-]+$/;
@@ -51,9 +51,16 @@ function isError<T extends BaseError>(error: any): error is T {
     return (error as T).data !== undefined;
 }
 
+type ErrorCode = Partial<GoogleSignInError>;
+
+function isGoogleSignInError(error : any): error is ErrorCode {
+    return (error as ErrorCode).code !== undefined;
+}
+
 export {
     validateName,
     validateEmail,
     validatePassword,
     isError,
+    isGoogleSignInError,
 }

@@ -61,7 +61,7 @@ const baseQueryWithReauth: BaseQueryFn<
     // Useful for logging purposes
     // console.log(`The response data \n ${JSON.stringify(res.data)}`);
 
-    if (res.error && (res.meta?.response?.status === 403 || res.meta?.response?.status === 401)) {
+    if (res.error && res.meta?.response?.status === 401) {
 
         if (!mutex.isLocked()) {
             const release = await mutex.acquire();

@@ -34,4 +34,12 @@ const getFontFamily = (fontWeight: weight) => {
   return fontMapping[fontWeight];
 };
 
-export { fontConfig, getFontFamily };
+const EnvVars = {
+  Google_ID : {
+    web : process.env.GOOGLE_WEB_CLIENT_ID as string,
+    android: process.env.GOOGLE_ANDROID_CLIENT_ID as string,
+    iOS : process.env.GOOGLE_IOS_CLIENT_ID as string,
+  }
+}
+
+export { fontConfig, getFontFamily, EnvVars };

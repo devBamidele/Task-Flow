@@ -1,7 +1,8 @@
 import Endpoints from "@/app/api/endpoints";
 import { api } from "../api";
-import { LoginPayload, LoginResponse, LoginReturnValue, LogoutPayload, LogoutResponse, MetaData, RefreshResponse, RefreshReturnValue, RegisterPayload, RegisterResponse } from "./service.types";
+import { AuthBase, LoginPayload, LoginResponse, LoginReturnValue, LogoutPayload, LogoutResponse, MetaData, RefreshResponse, RefreshReturnValue, RegisterPayload, RegisterResponse, ValidateTokenPayload, ValidateTokenResponse } from "./service.types";
 
+type AuthMessageOnly = Pick<AuthBase, 'message'>;
 
 export const authenticationApi = api.injectEndpoints({
     endpoints: builder => ({
@@ -27,11 +28,24 @@ export const authenticationApi = api.injectEndpoints({
             query: (body) => ({ url: Endpoints.register, method: 'POST', body })
         }),
 
+        validateToken : builder.mutation<ValidateTokenResponse, ValidateTokenPayload> ({
+            query: (body) => ({url: Endpoints.validateToken, method: 'POST', body}),
+
+            transformResponse: async (baseQueryReturnValue: AuthMessageOnly, meta: MetaData) => {
+                const token = meta?.response?.headers.get('auth') ?? '';
+                const refresh = meta?.response?.headers.get('refresh') ?? '';
+
+                const { message } = await baseQueryReturnValue;
+
+                return { tokens: { token, refresh }, message };
+            },
+        }),
     })
 })
 
 export const {
     useLoginMutation,
     useLogoutMutation,
-    useSignUpMutation
+    useSignUpMutation,
+    useValidateTokenMutation,
 } = authenticationApi

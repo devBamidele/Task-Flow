@@ -11,6 +11,8 @@ import AppButton from '../Button/AppButton';
 import MenuTaskTile from '../Tile/MenuTaskTile';
 import { ScaledSheet, ms, mvs, s, vs } from 'react-native-size-matters';
 import AppTextInput from '../TextInput/AppTextInput';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { clearTasks } from '@/app/redux/tasks';
 
 const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
     const dispatch = useAppDispatch();
@@ -20,10 +22,7 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
     const [color, setColor] = useState<number>(1)
     const [listName, setListName] = useState<string>('');
 
-    const logout = () => {
-        dispatch(loggedOut());
-        dispatch(clearUserData());
-    }
+    const logout = async () => handleGoogleLogout();
 
     const confirmLogout = () =>
         Alert.alert('Confirm Logout', 'Are you sure you want to logout', [
@@ -33,6 +32,18 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
 
     const handleTilePress = (title: string) => {
         setSelectedTile(title);
+    }
+
+    async function handleGoogleLogout() {
+        try {
+            dispatch(loggedOut());
+            dispatch(clearUserData());
+            dispatch(clearTasks());
+
+            await GoogleSignin.signOut();
+        } catch (error) {
+            console.log('Google Sign-Out Error: ', error);
+        }
     }
 
     return (

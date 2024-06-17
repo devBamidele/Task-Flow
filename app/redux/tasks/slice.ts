@@ -17,6 +17,9 @@ const taskSlice = createSlice({
     reducers: {
         updateTasks: (state, action: PayloadAction<Task[]>) => {
             state.data.push(...action.payload);
+        },
+        clearTasks: (state) => {
+            state.data = [];   
         }
     },
 
@@ -25,8 +28,6 @@ const taskSlice = createSlice({
         builder.addMatcher(
             tasksApi.endpoints.getAll.matchFulfilled,
             (state, { payload }) => {
-
-                //console.log(` Match fulfilled for the Get All Endpoint ${JSON.stringify(payload)}`);
 
                 payload.forEach((newTask) => {
 
@@ -38,6 +39,10 @@ const taskSlice = createSlice({
                         state.data.push(newTask);
                     }
                 });
+
+                if(payload.length == 0){
+                    state.data = [];
+                }
             }
         )
     },
@@ -45,6 +50,6 @@ const taskSlice = createSlice({
 
 export const selectTasks = (state : RootState) => state.task.data;
 
-export const { updateTasks } = taskSlice.actions;
+export const { updateTasks, clearTasks } = taskSlice.actions;
 
 export default taskSlice.reducer;

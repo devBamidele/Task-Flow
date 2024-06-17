@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { StyleSheet, View, Pressable, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Pressable, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -8,7 +8,8 @@ import { Colors, LoginScreenProps, horizontalScale, verticalScale } from '@/app/
 import { useForm } from './useForm';
 import { weight } from '@/app/utils/types';
 import { useLoginUser } from '@/app/hooks';
-import { ms, mvs, s } from 'react-native-size-matters';
+import { moderateScale, ms, mvs, s } from 'react-native-size-matters';
+import useGoogleLogin from './useGoogleLogin';
 
 
 const LoginScreen: FC<LoginScreenProps> = (props) => {
@@ -21,6 +22,7 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
     } = useForm();
 
     const { loginUser, isLoading } = useLoginUser();
+    const { handleGoogleLogin, isGloading } = useGoogleLogin();
 
     useEffect(() => {
         if (listener) {
@@ -119,6 +121,7 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
                         onPress={onSubmit}
                         buttonText="Continue"
                         isLoading={isLoading}
+                        isDisabled={isGloading}
                     />
 
                     {/* Sign Up View */}
@@ -149,12 +152,22 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
                     </View>
 
                     {/* Google Button */}
-                    <TouchableOpacity activeOpacity={0.6} style={styles.googleButton}>
-                        <Ionicons
-                            size={25}
-                            name="logo-google"
-                            color={Colors.textColor1}
-                        />
+                    <TouchableOpacity onPress={handleGoogleLogin} activeOpacity={0.6} style={styles.googleButton}>
+
+                        {
+                            isGloading ?
+                                <ActivityIndicator
+                                    color={Colors.textColor1}
+                                    size={moderateScale(20)}
+                                />
+                                :
+                                <Ionicons
+                                    size={25}
+                                    name="logo-google"
+                                    color={Colors.textColor1}
+                                />
+                        }
+
                     </TouchableOpacity>
 
                 </View>

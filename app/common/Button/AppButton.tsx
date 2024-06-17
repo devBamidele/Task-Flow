@@ -15,13 +15,14 @@ interface AppButtonProps extends ViewProps {
     showNext?: boolean;
     shadow?: number;
     isLoading?: boolean;
+    isDisabled?: boolean;
     paddingHorizontal?: number;
     paddingBottom?: number;
     textStyle?: TextStyle;
     marginTop?: number,
 }
 
-const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = false, shadow = 20, paddingHorizontal, paddingBottom, textStyle, isLoading, marginTop, ...otherProps }) => {
+const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = false, shadow = 20, paddingHorizontal, paddingBottom, textStyle, isLoading, isDisabled, marginTop, ...otherProps }) => {
     return (
         <View
             {...otherProps}
@@ -33,10 +34,14 @@ const AppButton: FC<AppButtonProps> = ({ onPress, buttonText, showNext = false, 
             }]}
         >
             <TouchableOpacity
-                disabled={isLoading}
+                disabled={isLoading || isDisabled}
                 onPress={onPress}
                 activeOpacity={0.6}
-                style={[styles.button, isLoading && styles.loadingButton, { elevation: shadow }]}>
+                style={[
+                    styles.button,
+                    (isLoading || isDisabled) && styles.loadingButton,
+                    { elevation: shadow }
+                ]}>
 
                 <View style={styles.shrinkBox} />
 

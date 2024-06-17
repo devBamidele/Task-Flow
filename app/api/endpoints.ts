@@ -10,6 +10,7 @@ namespace Endpoints {
     export const logout = `${authBase}/logout`;
     export const register = `${authBase}/register`;
     export const refresh = `${authBase}/refresh`;
+    export const validateToken = `${authBase}/validate-token`;
 
 
     // Tasks

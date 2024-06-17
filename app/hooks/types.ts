@@ -30,6 +30,18 @@ export interface CreateTaskParams extends NextAction {
 export interface UpdateTaskParams extends NextAction {
     data: UpdateTaskPayload,
 }
+export interface GoogleSignInError {
+    nativeStackAndroid?: Array<{
+        lineNumber: number;
+        file: string;
+        methodName: string;
+        class: string;
+    }>;
+    userInfo?: any;
+    message: string;
+    code: string;
+}
+
 
 export interface loginError extends BaseError {}
 

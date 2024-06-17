@@ -1,10 +1,10 @@
 import { useLoginMutation } from "../redux/auth/service";
+import showToast from "../common/Toast/showToast";
 import { FetchError, loginError, loginUserParams } from "./types";
 import { updateUserData } from "../redux/user/slice";
 import { updateTokens } from "../redux/auth/slice";
 import { useAppDispatch } from "./types";
 import { isError } from "../utils/helpers";
-import showToast from "../common/Toast/showToast";
 
 const useLoginUser = () => {
 
@@ -17,7 +17,7 @@ const useLoginUser = () => {
         login(params.data).unwrap()
             .then((res) => {
 
-                const { message, data, tokens } = res || {};
+                const { data, tokens } = res || {};
 
                 dispatch(updateUserData({ ...data }));
 
