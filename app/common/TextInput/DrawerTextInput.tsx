@@ -9,7 +9,6 @@ import { getFontFamily } from '@/app/utils';
 
 interface DrawerTextInputProps extends TextInputProps {
     text: string;
-    iconSize?: number
     preffixPadding?: number
     squareColor?: string,
     iconName: CustomIconNames;
@@ -17,7 +16,6 @@ interface DrawerTextInputProps extends TextInputProps {
 }
 
 const DrawerTextInput: FC<DrawerTextInputProps> = ({
-    iconSize,
     text,
     setText,
     iconName,
@@ -59,17 +57,7 @@ const DrawerTextInput: FC<DrawerTextInputProps> = ({
                             <Ionicons
                                 size={22.5}
                                 name={"checkmark"}
-                                color={Colors.textColor1}
-                                style={[
-                                    styles.prefixIcon,
-                                    focused && { color: Colors.textColor4 },
-                                    text.length != 0 && !focused && { color: Colors.textColor4 },
-                                    {
-                                        marginRight: horizontalScale(4),
-                                        paddingHorizontal: 8,
-                                        paddingVertical: 4,
-                                    }
-                                ]}
+                                style={styles.prefixIcon}
                             />
                         </Pressable>
                     </View>
@@ -111,21 +99,12 @@ const styles = StyleSheet.create({
         overflow: "hidden",
     },
 
-    listInputStyle: {
-        fontFamily: weight.R,
-    },
-
     prefixIcon: {
         alignItems: "center",
-        color: addOpacity(Colors.hintTextColor, 0.7),
-    },
-
-    square: {
-        width: ms(14),
-        height: ms(14),
-        borderRadius: 4,
-        marginRight: ms(10),
-        marginLeft: ms(13),
+        color: Colors.textColor4,
+        marginRight: horizontalScale(4),
+        paddingHorizontal: 8,
+        paddingVertical: 4,
     },
 
 });

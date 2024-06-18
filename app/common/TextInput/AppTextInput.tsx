@@ -9,7 +9,7 @@ import { getFontFamily } from '@/app/utils';
 
 interface AppTextInputProps extends TextInputProps {
     text: string;
-    isList?: boolean,
+    isTask?: boolean,
     iconSize?: number
     isPassword?: boolean,
     textPadding?: number,
@@ -23,7 +23,7 @@ interface AppTextInputProps extends TextInputProps {
 const AppTextInput: FC<AppTextInputProps> = ({
     iconSize,
     text,
-    isList,
+    isTask,
     setText,
     iconName,
     isPassword = false,
@@ -43,7 +43,7 @@ const AppTextInput: FC<AppTextInputProps> = ({
         <Pressable onPress={() => assignRef?.current?.focus() ?? customRef.current?.focus()} >
             <View style={[
                 styles.container,
-                focused ? styles.focusedTextField : null,
+                focused && styles.focusedTextField,
             ]}>
                 {
                     iconName && <Ionicons
@@ -51,14 +51,12 @@ const AppTextInput: FC<AppTextInputProps> = ({
                         name={iconName}
                         style={[
                             styles.prefixIcon,
-                            focused && { color: Colors.primary },
-                            text.length != 0 && !focused && { color: Colors.textColor1 },
+                            focused && styles.focusedIcon,
+                            text.length !== 0 && !focused && styles.unfocusedIcon,
                             { paddingLeft: preffixPadding }
                         ]}
                     />
                 }
-
-                {isList && <View style={[{ backgroundColor: squareColor }, styles.square]} />}
 
                 <TextInput
                     onFocus={() => setFocused(true)}
@@ -70,13 +68,17 @@ const AppTextInput: FC<AppTextInputProps> = ({
                     selectionColor={Colors.selectionColor}
                     cursorColor={Colors.textColor1}
                     secureTextEntry={passwordHidden}
-                    style={[styles.textInputStyle, isList && styles.listInputStyle, { paddingLeft: textPadding }]}
+                    style={[
+                        styles.textInputStyle,
+                        isTask && styles.taskTextInput,
+                        { paddingLeft: textPadding }
+                    ]}
                     {...otherProps}
                 />
 
                 {
                     isPassword &&
-                    <View style={{ alignItems: "center" }}>
+                    <View style={styles.passwordContainer}>
                         <Pressable onPress={() => setPasswordHidden(!passwordHidden)} >
                             <Ionicons
                                 size={22.5}
@@ -84,13 +86,9 @@ const AppTextInput: FC<AppTextInputProps> = ({
                                 color={Colors.textColor1}
                                 style={[
                                     styles.prefixIcon,
-                                    focused && { color: Colors.textColor4 },
-                                    text.length != 0 && !focused && { color: Colors.textColor4 },
-                                    {
-                                        marginRight: horizontalScale(4),
-                                        paddingHorizontal: 8,
-                                        paddingVertical: 4,
-                                    }
+                                    focused && styles.focusedPasswordIcon,
+                                    text.length !== 0 && !focused && styles.unfocusedPasswordIcon,
+                                    styles.passwordIcon
                                 ]}
                             />
                         </Pressable>
@@ -104,11 +102,9 @@ const AppTextInput: FC<AppTextInputProps> = ({
 export default AppTextInput;
 
 const styles = StyleSheet.create({
-
     focusedTextField: {
         backgroundColor: Colors.listTextBackground,
     },
-
     textInputStyle: {
         fontFamily: getFontFamily(weight.L),
         color: Colors.textColor4,
@@ -118,7 +114,11 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingRight: ms(8),
     },
-
+    taskTextInput: {
+        fontSize: 13,
+        paddingTop: 10,
+        paddingBottom: 10,
+    },
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -128,16 +128,30 @@ const styles = StyleSheet.create({
         borderColor: Colors.divider,
         borderWidth: StyleSheet.hairlineWidth, // 1
     },
-
-    listInputStyle: {
-        fontFamily: weight.R,
-    },
-
     prefixIcon: {
         alignItems: "center",
         color: addOpacity(Colors.hintTextColor, 0.7),
     },
-
+    focusedIcon: {
+        color: Colors.primary,
+    },
+    unfocusedIcon: {
+        color: Colors.textColor1,
+    },
+    passwordContainer: {
+        alignItems: "center",
+    },
+    focusedPasswordIcon: {
+        color: Colors.textColor4,
+    },
+    unfocusedPasswordIcon: {
+        color: Colors.textColor4,
+    },
+    passwordIcon: {
+        marginRight: horizontalScale(4),
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+    },
     square: {
         width: ms(14),
         height: ms(14),
@@ -145,5 +159,4 @@ const styles = StyleSheet.create({
         marginRight: ms(10),
         marginLeft: ms(13),
     },
-
 });

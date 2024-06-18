@@ -15,8 +15,8 @@ function validateName(name: string) {
         return 'Name cannot be empty';
     }
 
-    if (trimmedName.length < 2) {
-        return 'Name should be at least 2 characters long';
+    if (trimmedName.length < 5) {
+        return 'Name should be at least 5 characters long';
     }
 
     if (!nameRegex.test(trimmedName)) {
