@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
     },
     arrowIcon: {
         marginRight: 6,
-        marginTop: 6
+        marginTop: 6,
+        marginLeft: 12,
     },
 
     generic: {

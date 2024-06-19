@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         paddingRight: ms(8),
     },
     taskTextInput: {
-        fontSize: 13,
+        fontSize: 15,
         paddingTop: 10,
         paddingBottom: 10,
     },

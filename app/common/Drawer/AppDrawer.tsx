@@ -11,8 +11,8 @@ import AppButton from '../Button/AppButton';
 import MenuTaskTile from '../Tile/MenuTaskTile';
 import { ScaledSheet, ms, mvs, s, vs } from 'react-native-size-matters';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { clearTasks } from '@/app/redux/tasks';
 import DrawerTextInput from '../TextInput/DrawerTextInput';
+
 
 const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
     const dispatch = useAppDispatch();
@@ -114,7 +114,10 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
                                 />
                             </View>
 
-                            <View style={styles.seperator} />
+                            <View style={[styles.seperator, {
+                                marginBottom: mvs(7),
+                                marginTop: vs(4),
+                            }]} />
 
                             <View style={styles.subMenuSection}>
                                 <MenuTaskTile title='Settings' icon="options-outline" />

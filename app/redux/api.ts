@@ -84,6 +84,7 @@ const baseQueryWithReauth: BaseQueryFn<
                     res = await baseQuery(args, api, extraOptions);
 
                 } else {
+                    console.log(`Just in case it automatically logs me out \n ${JSON.stringify(refreshRes)}`);
 
                     // Reset the data
                     api.dispatch(loggedOut());

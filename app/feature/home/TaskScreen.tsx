@@ -4,18 +4,19 @@ import { TaskScreenProps } from '@/app/utils/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SelectList } from 'react-native-dropdown-select-list';
-import { AppButton, AppScrollView, AppText, AppTextInput } from '@/app/common';
+import { AddTaskButton, AppButton, AppScrollView, AppText, AppTextInput, SubtaskTextInput } from '@/app/common';
 import { Colors, addOpacity, weight } from '@/app/utils';
 import useCreateTask from '@/app/hooks/useCreateTask';
 import useUpdateTask from '@/app/hooks/useUpdateTask';
-import { ms } from 'react-native-size-matters';
+import { ms, mvs } from 'react-native-size-matters';
+import DrawerTextInput from '@/app/common/TextInput/DrawerTextInput';
 
 const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBack } }) => {
     const isUpdate = params !== undefined;
 
     const [title, setTitle] = useState<string>(params?.title ?? '');
     const [description, setDescription] = useState<string>(params?.description ?? '');
-    const [textChange, setTextChange] = useState<boolean>(false);
+    const [subtask, setSubtask] = useState("");
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
     const taskRef = useRef<TextInput>(null);
@@ -25,6 +26,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
 
     const { createTask, isCreatingTask } = useCreateTask();
     const { updateTask, isUpdatingTask } = useUpdateTask();
+
 
     const data = [
         { key: '1', value: 'Personal' },
@@ -55,7 +57,6 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
     useEffect(() => {
         // Determine if there's any text change
         const hasTextChanged = (params?.title !== title || params?.description !== description);
-        setTextChange(hasTextChanged);
 
         // Determine if the button should be disabled
         if (isUpdate) {
@@ -144,7 +145,17 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                             Subtask:
                         </AppText>
                     </View>
+
+                    <View style={{marginHorizontal:14}} >
+                        <SubtaskTextInput
+                            placeholder="Add New Subtask"
+                            text={subtask}
+                            setText={setSubtask}
+                        />
+                    </View>
+
                 </View>
+
             </AppScrollView>
             <AppButton
                 onPress={onPress}

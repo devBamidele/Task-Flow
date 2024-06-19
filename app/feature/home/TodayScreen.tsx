@@ -19,7 +19,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
 
     const dispatch = useAppDispatch();
 
-    const { isLoading, isError, error, isSuccess, data, refetch } = useGetAllQuery();
+    const { isLoading, isFetching, isError, error, isSuccess, data, refetch } = useGetAllQuery();
 
     const online = useAppSelector(onlineState);
 
@@ -69,7 +69,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                 </View>
 
 
-                {isLoading && !hasCache &&
+                {isFetching && !hasCache &&
                     <View style={styles.center} >
                         <ActivityIndicator
                             color={Colors.primary}
