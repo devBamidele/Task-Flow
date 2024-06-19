@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { useAppDispatch } from "@/app/hooks";
 import { isUserOnline } from "@/app/redux/user/slice";
 import AppText from "../Text/AppText";
+import { ms } from "react-native-size-matters";
 
 const NetworkConnectivity  = () => {
   const netInfo = useNetInfo();
@@ -43,6 +44,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
+    marginHorizontal: ms(6),
+    marginBottom: ms(4),
+    borderRadius: 6
   },
   text: {
     color: "white",

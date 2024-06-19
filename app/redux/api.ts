@@ -13,6 +13,7 @@ import type {
 
 import { loggedOut, updateTokens } from './auth/slice';
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
+import { clearUserData } from './user/slice';
 
 const mutex = new Mutex();
 
@@ -83,7 +84,10 @@ const baseQueryWithReauth: BaseQueryFn<
                     res = await baseQuery(args, api, extraOptions);
 
                 } else {
+
+                    // Reset the data
                     api.dispatch(loggedOut());
+                    api.dispatch(clearUserData());
                 }
 
             } finally {
@@ -97,7 +101,6 @@ const baseQueryWithReauth: BaseQueryFn<
     }
     return res;
 }
-
 // Single API slice object
 export const api = createApi({
     reducerPath: 'todo',

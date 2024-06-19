@@ -7,9 +7,10 @@ import { AppButton, AppScrollView, AppText, AppTextInput, DismissKeyboard } from
 import { Colors, LoginScreenProps, horizontalScale, verticalScale } from '@/app/utils';
 import { useForm } from './useForm';
 import { weight } from '@/app/utils/types';
-import { useLoginUser } from '@/app/hooks';
+import { useAppSelector, useLoginUser } from '@/app/hooks';
 import { moderateScale, ms, mvs, s } from 'react-native-size-matters';
 import useGoogleLogin from './useGoogleLogin';
+import { getTasks, hasData } from '@/app/redux/tasks';
 
 
 const LoginScreen: FC<LoginScreenProps> = (props) => {

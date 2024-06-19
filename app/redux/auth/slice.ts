@@ -6,14 +6,14 @@ const initialState: AuthState = {
     refresh: "",
 }
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
         updateTokens(state, action: PayloadAction<Partial<AuthState>>) {
             Object.assign(state, action.payload)
         },
-
+        
         loggedOut(state){
             state.token = "";
             state.refresh = "";

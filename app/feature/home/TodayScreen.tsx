@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AddTaskButton, AppText, AppTile } from '@/app/common';
 import { Colors, TodayScreenProps, weight } from '@/app/utils';
-import { selectTasks, useGetAllQuery } from '@/app/redux/tasks';
+import { getTasks, hasData, useGetAllQuery } from '@/app/redux/tasks';
 import { moderateScale } from '@/app/utils/metric';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { onlineState } from '@/app/redux/user/slice';
@@ -23,16 +23,14 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
 
     const online = useAppSelector(onlineState);
 
-    const tasks = useAppSelector(selectTasks);
+    const tasks = useAppSelector(getTasks);
+    const hasCache = useAppSelector(hasData);
 
     const onRefresh = useCallback(async () => {
 
         setRefreshing(true);
 
         const result = await refetch();
-
-        // Useful for logging purposes
-        //console.log(`The reult from the data is ${JSON.stringify(result)}`)
 
         setRefreshing(false);
 
@@ -71,7 +69,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                 </View>
 
 
-                {isLoading &&
+                {isLoading && !hasCache &&
                     <View style={styles.center} >
                         <ActivityIndicator
                             color={Colors.primary}
@@ -80,7 +78,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                     </View>
                 }
 
-                {isError && online &&
+                {isError && !hasCache &&
                     <View style={styles.center} >
                         <AppText>
                             {isSuccess ? 'Is success' : 'Not success'}
@@ -89,24 +87,18 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                 }
 
                 <View style={styles.taskList}>
-                    {(data !== undefined &&
-                        <FlatList
-                            data={tasks}
-                            keyExtractor={(task) => task._id}
-                            renderItem={({ item, index }) => (
-                                <AppTile item={item} index={index} navigation={navigation} route={route} />
-                            )}
-                            refreshControl={
-                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                            }
-                            ItemSeparatorComponent={() =>
-                                <View
-                                    style={styles.seperator}
-                                />
-                            }
-                            showsVerticalScrollIndicator={false}
-                        />
-                    )}
+                    <FlatList
+                        data={tasks}
+                        keyExtractor={(task) => task._id}
+                        renderItem={({ item, index }) => (
+                            <AppTile item={item} index={index} navigation={navigation} route={route} />
+                        )}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
+                        ItemSeparatorComponent={() => <View style={styles.seperator} />}
+                        showsVerticalScrollIndicator={false}
+                    />
                 </View>
 
 

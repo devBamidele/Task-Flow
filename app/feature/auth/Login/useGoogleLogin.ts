@@ -50,6 +50,8 @@ const useGoogleLogin = () => {
                                 title: 'Oops',
                                 message: 'An error occurred while attempting to login with Google'
                             })
+
+                            console.log(`An error occurred while trying to login with Google ${JSON.stringify(err)}`)
                         } else {
                             showToast({
                                 title: 'Network Error',

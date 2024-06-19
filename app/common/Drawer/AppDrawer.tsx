@@ -47,7 +47,6 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
         try {
             dispatch(loggedOut());
             dispatch(clearUserData());
-            dispatch(clearTasks());
 
             await GoogleSignin.signOut();
         } catch (error) {

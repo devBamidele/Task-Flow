@@ -40,7 +40,7 @@ export default function App() {
       <PersistGate persistor={persistor}>
         <BaseStack />
         <Toast config={toastConfig}/>
-        {/* <NetworkConnectivity/> */}
+        <NetworkConnectivity/>
       </PersistGate>
     </Provider>
   );
