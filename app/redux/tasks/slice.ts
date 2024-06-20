@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Task } from "./service.types";
 import { tasksApi } from "./service";
 import { RootState } from "../store";
-import { authSlice, loggedOut } from "../auth/slice";
+import { loggedOut } from "../auth/slice";
 
 interface TaskData {
     data: Task[];

@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewProps, ViewStyle } from 'react-native'
+import { ActivityIndicator, StyleSheet, TextStyle, TouchableOpacity, View, ViewProps } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { FC } from 'react'
 import Colors from '../../utils/colors'
@@ -9,7 +9,7 @@ import { ms, mvs } from 'react-native-size-matters';
 
 type onPress = () => void;
 
-interface AppButtonProps extends ViewProps {
+interface OutlinedButtonProps extends ViewProps {
     onPress?: onPress;
     buttonText: string;
     showNext?: boolean;
@@ -20,9 +20,8 @@ interface AppButtonProps extends ViewProps {
     paddingBottom?: number;
     textStyle?: TextStyle;
     marginTop?: number,
-    isOutlined?: boolean,
 }
-const AppButton: FC<AppButtonProps> = ({
+const OutlinedButton: FC<OutlinedButtonProps> = ({
     onPress,
     buttonText,
     showNext = false,
@@ -33,13 +32,10 @@ const AppButton: FC<AppButtonProps> = ({
     isLoading,
     isDisabled,
     marginTop,
-    isOutlined,
-
     ...otherProps
 }) => {
     return (
         <View
-           
             style={[styles.buttonView,
             {
                 paddingHorizontal: paddingHorizontal ?? 20,
@@ -83,7 +79,7 @@ const AppButton: FC<AppButtonProps> = ({
     )
 }
 
-export default AppButton
+export default OutlinedButton
 
 const styles = StyleSheet.create({
     buttonView: {
@@ -93,14 +89,12 @@ const styles = StyleSheet.create({
     button: {
         flexDirection: 'row',
         justifyContent: "space-between",
-
         paddingVertical: mvs(8),
         paddingHorizontal: 16,
-        backgroundColor: Colors.primary,
         borderRadius: 8,
         alignItems: "center",
-
-        shadowColor: Colors.primary,
+        borderColor: Colors.primary,
+        borderWidth: StyleSheet.hairlineWidth,
 
         //iOS
         shadowOffset: { width: 0, height: 8 },
@@ -119,7 +113,7 @@ const styles = StyleSheet.create({
 
     buttonText: {
         textAlign: "center",
-        color: Colors.white,
+        color: Colors.primary,
         fontSize: ms(13),
     }
 })

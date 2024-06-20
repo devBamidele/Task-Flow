@@ -88,7 +88,6 @@ const baseQueryWithReauth: BaseQueryFn<
 
                     // Reset the data
                     api.dispatch(loggedOut());
-                    api.dispatch(clearUserData());
                 }
 
             } finally {
@@ -112,5 +111,5 @@ export const api = createApi({
 
     endpoints: () => ({}),
 
-    tagTypes: ['Tasks'],
+    tagTypes: ['Tasks', 'SubTasks'],
 })

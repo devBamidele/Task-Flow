@@ -7,12 +7,12 @@ import { Task } from '@/app/redux/tasks';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ms, s } from 'react-native-size-matters';
 
-interface AppTileProps extends TodayScreenProps {
+interface TaskTileProps extends TodayScreenProps {
     item: Task,
     index: number,
 }
 
-const AppTile: FC<AppTileProps> = ({ item, index, navigation }) => {
+const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
 
     const onPress = () => {
         navigation.navigate('Task', item);
@@ -54,19 +54,25 @@ const AppTile: FC<AppTileProps> = ({ item, index, navigation }) => {
                         </AppText>
                     </View>
 
-                    <View style={styles.divider} />
 
-                    <View style={styles.generic}>
-                        <View style={styles.countContainer}>
-                            <AppText style={styles.countText}>
-                                {5}
-                            </AppText>
-                        </View>
 
-                        <AppText style={styles.dateText}>
-                            Subtasks
-                        </AppText>
-                    </View>
+                    {
+                        item.subtasks && item.subtasks.length > 0 &&
+                        <><View style={styles.divider} />
+
+                            <View style={styles.generic}>
+                                <View style={styles.countContainer}>
+                                    <AppText style={styles.countText}>
+                                        {`${item.subtasks?.length}`}
+                                    </AppText>
+                                </View>
+
+                                <AppText style={styles.dateText}>
+                                    Subtasks
+                                </AppText>
+                            </View>
+                        </>
+                    }
 
                     <View style={styles.divider} />
 
@@ -90,7 +96,7 @@ const AppTile: FC<AppTileProps> = ({ item, index, navigation }) => {
     );
 }
 
-export default AppTile;
+export default TaskTile;
 
 const styles = StyleSheet.create({
     countContainer: {
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
         marginTop: ms(2),
     },
 
-     square: {
+    square: {
         width: ms(13),
         height: ms(13),
         borderRadius: 4,

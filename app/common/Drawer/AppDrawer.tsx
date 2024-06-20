@@ -46,8 +46,6 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = (props) => {
     const logout = async () => {
         try {
             dispatch(loggedOut());
-            dispatch(clearUserData());
-
             await GoogleSignin.signOut();
         } catch (error) {
             console.log('Google Sign-Out Error: ', error);

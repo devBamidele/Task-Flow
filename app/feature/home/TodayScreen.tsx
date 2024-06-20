@@ -2,7 +2,7 @@ import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, Vie
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { AddTaskButton, AppText, AppTile } from '@/app/common';
+import { AddTaskButton, AppText, TaskTile } from '@/app/common';
 import { Colors, TodayScreenProps, weight } from '@/app/utils';
 import { getTasks, hasData, useGetAllQuery } from '@/app/redux/tasks';
 import { moderateScale } from '@/app/utils/metric';
@@ -91,7 +91,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                         data={tasks}
                         keyExtractor={(task) => task._id}
                         renderItem={({ item, index }) => (
-                            <AppTile item={item} index={index} navigation={navigation} route={route} />
+                            <TaskTile item={item} index={index} navigation={navigation} route={route} />
                         )}
                         refreshControl={
                             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -149,7 +149,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.divider,
         marginHorizontal: 6,
         marginBottom: 2,
-
     },
 
     checkbox: {

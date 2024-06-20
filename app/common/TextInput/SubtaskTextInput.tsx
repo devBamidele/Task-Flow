@@ -12,10 +12,12 @@ interface SubtaskTextInputProps extends TextInputProps {
     preffixPadding?: number
     squareColor?: string,
     setText: (value: string) => void;
+    onSave: () => void;
 }
 
 const SubtaskTextInput: FC<SubtaskTextInputProps> = ({
     text,
+    onSave,
     setText,
     preffixPadding = 16,
     squareColor,
@@ -43,9 +45,9 @@ const SubtaskTextInput: FC<SubtaskTextInputProps> = ({
                 />
 
                 {
-                    text.length > 0 &&
+                    text.length > 3 &&
                     <View>
-                        <Pressable onPress={() => { }} >
+                        <Pressable onPress={onSave} >
                             <Ionicons
                                 size={22.5}
                                 name={"checkmark"}

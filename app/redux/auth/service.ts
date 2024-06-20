@@ -1,17 +1,17 @@
 import Endpoints from "@/app/api/endpoints";
 import { api } from "../api";
-import { 
-    AuthBase, 
-    LoginPayload, 
-    LoginResponse, 
-    LoginReturnValue, 
-    LogoutPayload, 
-    LogoutResponse, 
-    MetaData, 
-    RegisterPayload, 
-    RegisterResponse, 
-    ValidateTokenPayload, 
-    ValidateTokenResponse 
+import {
+    AuthBase,
+    LoginPayload,
+    LoginResponse,
+    LoginReturnValue,
+    LogoutPayload,
+    LogoutResponse,
+    MetaData,
+    RegisterPayload,
+    RegisterResponse,
+    ValidateTokenPayload,
+    ValidateTokenResponse
 } from "./service.types";
 
 type AuthMessageOnly = Pick<AuthBase, 'message'>;
@@ -23,7 +23,7 @@ const transformWithTokens = async <T>(baseQueryReturnValue: T, meta: MetaData) =
     return { tokens: { token, refresh }, message, ...rest };
 };
 
-const createQuery = <T>(endpoint: string) => (body: T) => ({ 
+const createQuery = <T>(endpoint: string) => (body: T) => ({
     url: endpoint,
     method: 'POST',
     body,
@@ -35,7 +35,7 @@ export const authenticationApi = api.injectEndpoints({
         login: builder.mutation<LoginResponse, LoginPayload>({
             query: createQuery(Endpoints.login),
 
-            transformResponse: (baseQueryReturnValue : LoginReturnValue, meta : MetaData) => 
+            transformResponse: (baseQueryReturnValue: LoginReturnValue, meta: MetaData) =>
                 transformWithTokens<LoginReturnValue>(baseQueryReturnValue, meta),
         }),
 
@@ -50,7 +50,7 @@ export const authenticationApi = api.injectEndpoints({
         validateToken: builder.mutation<ValidateTokenResponse, ValidateTokenPayload>({
             query: createQuery(Endpoints.validateToken),
 
-            transformResponse: (baseQueryReturnValue : AuthMessageOnly, meta: MetaData) => 
+            transformResponse: (baseQueryReturnValue: AuthMessageOnly, meta: MetaData) =>
                 transformWithTokens<AuthMessageOnly>(baseQueryReturnValue, meta),
         }),
     })
