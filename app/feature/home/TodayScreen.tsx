@@ -1,21 +1,23 @@
-import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, BackHandler, FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AddTaskButton, AppText, TaskTile } from '@/app/common';
-import { Colors, TodayScreenProps, weight } from '@/app/utils';
+import { Colors, TodayScreenProps, weight, moderateScale } from '@/app/utils';
 import { getTasks, hasData, useGetAllQuery } from '@/app/redux/tasks';
-import { moderateScale } from '@/app/utils/metric';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { onlineState } from '@/app/redux/user/slice';
 import { api } from '@/app/redux/api';
 import { tasksApi } from '@/app/redux/tasks/service';
 import { ms, mvs } from 'react-native-size-matters';
+import { clearSelecting, clearTasks, isSelecting } from '@/app/redux/tasks/slice';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
 
     const [refreshing, setRefreshing] = useState(false);
+    const select = useAppSelector(isSelecting);
 
     const dispatch = useAppDispatch();
 
@@ -27,14 +29,27 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
     const hasCache = useAppSelector(hasData);
 
     const onRefresh = useCallback(async () => {
-
         setRefreshing(true);
-
         const result = await refetch();
-
         setRefreshing(false);
-
     }, []);
+
+    const onBackPressed = () => {
+        if (select) {
+            dispatch(clearSelecting());
+            return true;
+        }
+        return false;
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPressed);
+
+            return () => backHandler.remove();
+        }, [select])
+    );
+
 
     return (
         <SafeAreaView style={styles.mainView}>
@@ -148,7 +163,7 @@ const styles = StyleSheet.create({
         height: StyleSheet.hairlineWidth,
         backgroundColor: Colors.divider,
         marginHorizontal: 6,
-        marginBottom: 2,
+        //marginBottom: 2,
     },
 
     checkbox: {

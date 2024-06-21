@@ -2,7 +2,7 @@ export { default as Colors } from '@/app/utils/colors';
 
 export { validateName, validateEmail, validatePassword, isError, isGoogleSignInError } from '@/app/utils/helpers';
 
-export { horizontalScale, verticalScale } from '@/app/utils/metric';
+export { horizontalScale, verticalScale,moderateScale } from '@/app/utils/metric';
 
 export { LoginScreenProps } from '@/app/utils/types';
 

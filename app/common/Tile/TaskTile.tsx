@@ -1,11 +1,13 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import Checkbox from 'expo-checkbox';
 import AppText from '../Text/AppText';
-import { Colors, TodayScreenProps, addOpacity, weight } from '@/app/utils';
+import { Colors, TodayScreenProps, addOpacity } from '@/app/utils';
 import { Task } from '@/app/redux/tasks';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ms, s } from 'react-native-size-matters';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { getSelectedTiles, isSelecting, updateSelecting } from '@/app/redux/tasks/slice';
 
 interface TaskTileProps extends TodayScreenProps {
     item: Task,
@@ -13,15 +15,46 @@ interface TaskTileProps extends TodayScreenProps {
 }
 
 const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
+    const dispatch = useAppDispatch();
+    const select = useAppSelector(isSelecting);
+    const selectedTiles = useAppSelector(getSelectedTiles);
 
-    const onPress = () => {
-        navigation.navigate('Task', item);
-    };
+    // Determine initial value of longPressed based on selectedTiles
+    const initialLongPressed = selectedTiles.some(tileId => tileId === item._id); // Replace someId with the ID you're checking
 
     const [isChecked, setChecked] = useState(false);
+    const [longPressed, setLongPressed] = useState(initialLongPressed);
+
+    const onPress = useCallback(() => {
+        if (select) {
+            onLongPress();
+            return;
+        }
+        navigation.navigate('Task', item);
+    }, [select]);
+
+    const onLongPress = useCallback(() => {
+        setLongPressed((prev) => {
+            const add = !prev;
+            dispatch(updateSelecting({ id: item._id, add: add }));
+            return add;
+        });
+
+    }, []);
+
+    useEffect(() => {
+        if (!select) {
+            setLongPressed(false)
+        }
+    }, [select])
+
 
     return (
-        <Pressable style={styles.container} onPress={onPress} >
+        <Pressable
+            style={[styles.container, longPressed && styles.selectedStyle]}
+            onPress={onPress}
+            delayLongPress={50}
+            onLongPress={onLongPress} >
 
             <Pressable style={styles.checkBoxPressable} onPress={() => setChecked(!isChecked)} >
                 <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
@@ -58,7 +91,8 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
 
                     {
                         item.subtasks && item.subtasks.length > 0 &&
-                        <><View style={styles.divider} />
+                        <>
+                            <View style={styles.divider} />
 
                             <View style={styles.generic}>
                                 <View style={styles.countContainer}>
@@ -99,6 +133,11 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
 export default TaskTile;
 
 const styles = StyleSheet.create({
+
+    selectedStyle: {
+        backgroundColor: addOpacity(Colors.listTextBackground, 1),
+    },
+
     countContainer: {
         backgroundColor: Colors.numberContainer,
         alignItems: 'center',
@@ -114,8 +153,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: "flex-start",
         marginHorizontal: 4,
-        marginVertical: 5,
-        paddingBottom: 4
+        paddingTop: 3,
+        paddingBottom: 10
     },
     checkBoxPressable: {
         paddingTop: 7,

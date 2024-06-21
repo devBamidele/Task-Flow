@@ -13,7 +13,6 @@ import type {
 
 import { loggedOut, updateTokens } from './auth/slice';
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
-import { clearUserData } from './user/slice';
 
 const mutex = new Mutex();
 
@@ -86,7 +85,7 @@ const baseQueryWithReauth: BaseQueryFn<
                 } else {
                     console.log(`Just in case it automatically logs me out \n ${JSON.stringify(refreshRes)}`);
 
-                    // Reset the data
+                    // Automatically log out
                     api.dispatch(loggedOut());
                 }
 

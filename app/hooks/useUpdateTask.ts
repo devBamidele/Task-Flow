@@ -1,5 +1,7 @@
+import { updateTasks } from "../redux/tasks";
 import { useUpdateMutation } from "../redux/tasks/service";
 import { UpdateTaskParams, useAppDispatch } from "./types";
+import { fetch } from "@react-native-community/netinfo";
 
 const useUpdateTask = () => {
 
@@ -9,19 +11,31 @@ const useUpdateTask = () => {
 
     const updateTask = (params: UpdateTaskParams) => {
 
-        update(params.data).unwrap()
-            .then((res) => {
+        params.next();
 
-                params.next();
-            }).catch((err) => {
+        dispatch(updateTasks(params.data));
 
-                console.log(JSON.stringify(err))
-            })
+        
+
+        // fetch().then(state => {
+        //     console.log("Connection type", state.type);
+        //     console.log("Is connected?", state.isConnected);
+        // });
+
+
+        // update(params.data).unwrap()
+        //     .then((res) => {
+
+        //         params.next();
+        //     }).catch((err) => {
+
+        //         console.log(JSON.stringify(err))
+        //     })
     }
 
     return {
         updateTask,
-        isUpdatingTask : isLoading,
+        isUpdatingTask: isLoading,
     }
 }
 

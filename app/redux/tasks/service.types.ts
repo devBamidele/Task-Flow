@@ -28,6 +28,11 @@ export interface UpdateTaskPayload {
     subtasks?: SubTask[] // Keep your head up for task?
 }
 
+export interface UpdateSelectingPayload {
+    id: string;
+    add: boolean;
+}
+
 export interface TaskResponse {
     tasks: Task[],
 }

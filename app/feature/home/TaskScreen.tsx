@@ -12,7 +12,6 @@ import { ms, mvs } from 'react-native-size-matters';
 import DrawerTextInput from '@/app/common/TextInput/DrawerTextInput';
 import { SubTask, Task } from '@/app/redux/tasks/service.types';
 import _, { has } from 'lodash';
-import mongoose from 'mongoose';
 
 const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBack } }) => {
     const isUpdate = params !== undefined;
@@ -38,7 +37,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
         }
 
         const newSubtaskObject: SubTask = {
-            _id: new mongoose.Types.ObjectId().toString(),
+            _id: new Date().toISOString(),
             task: newSubTask.trim(),
         };
 
@@ -55,16 +54,16 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
         { key: '5', value: 'Home' }
     ];
 
-    const hasSubtasks = params?.subtasks && params.subtasks.length > 0 ;
+    const hasSubtasks = params?.subtasks && params.subtasks.length > 0;
 
     const confirmDelete = () =>
-        Alert.alert('Delete', `Confirm delete tasks ${hasSubtasks ? "and related subtasks": ""} ?`, [
+        Alert.alert('Delete', `Confirm delete tasks ${hasSubtasks ? "and related subtasks" : ""} ?`, [
             { text: 'Cancel', style: 'cancel' },
             { text: 'OK', onPress: onDelete },
         ]);
 
     const onDelete = () => {
-        
+
     }
 
     const onPress = () => {

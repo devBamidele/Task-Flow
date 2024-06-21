@@ -10,7 +10,6 @@ import { weight } from '@/app/utils/types';
 import { useAppSelector, useLoginUser } from '@/app/hooks';
 import { moderateScale, ms, mvs, s } from 'react-native-size-matters';
 import useGoogleLogin from './useGoogleLogin';
-import { getTasks, hasData } from '@/app/redux/tasks';
 
 
 const LoginScreen: FC<LoginScreenProps> = (props) => {

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Task } from "./service.types";
+import { Task, SubTask, UpdateTaskPayload, UpdateSelectingPayload } from "./service.types";
 import { tasksApi } from "./service";
 import { RootState } from "../store";
 import { loggedOut } from "../auth/slice";
@@ -7,31 +7,57 @@ import { loggedOut } from "../auth/slice";
 interface TaskData {
     data: Task[];
     hasCache: boolean;
+    selected: string[];
 }
+
 
 const initialState: TaskData = {
     data: [],
     hasCache: false,
+    selected: [],
 };
 
-const resetTaskState = (state: TaskData) => {
-    state.data = [];
-    state.hasCache = false;
-};
+
+const resetTaskState = (state: TaskData) => initialState;
 
 const taskSlice = createSlice({
     name: "tasks",
     initialState,
     reducers: {
+        updateTasks: (state, action: PayloadAction<UpdateTaskPayload>) => {
+            const { _id, title, description, subtasks } = action.payload;
 
-        updateTasks: (state, action: PayloadAction<Task[]>) => {
-            state.data.push(...action.payload);
+            const taskIndex = state.data.findIndex((task) => task._id === _id);
+
+            if (taskIndex !== -1) {
+                if (title) state.data[taskIndex].title = title;
+                if (description) state.data[taskIndex].description = description;
+                if (subtasks) state.data[taskIndex].subtasks = subtasks;
+            }
+        },
+
+        updateSelecting: (state: TaskData, action: PayloadAction<UpdateSelectingPayload>) => {
+            const { id, add } = action.payload;
+            
+            if (add) {
+                if (!state.selected.includes(id)) {
+                    state.selected.push(id);
+                }
+            } else {
+                const index = state.selected.indexOf(id);
+                if (index !== -1) {
+                    state.selected.splice(index, 1);
+                }
+            }
+        },
+
+        clearSelecting: (state) => {
+            state.selected.length = 0;
         },
 
         clearTasks: resetTaskState,
     },
     extraReducers: (builder) => {
-
         builder.addCase(loggedOut, resetTaskState);
 
         builder.addMatcher(
@@ -59,7 +85,9 @@ const taskSlice = createSlice({
 
 export const getTasks = (state: RootState) => state.task.data;
 export const hasData = (state: RootState) => state.task.hasCache;
+export const isSelecting = (state: RootState) => state.task.selected.length > 0;
+export const getSelectedTiles = (state: RootState) => state.task.selected;
 
-export const { updateTasks, clearTasks } = taskSlice.actions;
+export const { updateTasks, clearTasks, updateSelecting, clearSelecting } = taskSlice.actions;
 
 export default taskSlice.reducer;

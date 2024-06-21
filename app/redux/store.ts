@@ -17,7 +17,6 @@ const reducerPath = api.reducerPath;
 const persistConfig = {
   key: 'root',
   storage,
-  serialize: true,
 }
 
 const rootReducer = combineReducers({
