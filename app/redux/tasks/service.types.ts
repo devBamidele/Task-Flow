@@ -5,15 +5,18 @@ interface BaseResponse {
 interface BaseTask {
     title: string,
     description: string,
+    due_date? : string,
 }
 
-export interface AddTaskPayload extends BaseTask {
+export interface AddTaskPayload extends Omit<BaseTask, 'due_date'> {
+    due_date?: Date,
     subtasks?: SubTask[]
 }
 
 export interface Task extends BaseTask {
     _id: string,
     subtasks?: SubTask[],
+    needsSync?: boolean,
 }
 
 export interface SubTask {
@@ -25,7 +28,8 @@ export interface UpdateTaskPayload {
     _id: string,
     title?: string,
     description?: string,
-    subtasks?: SubTask[] // Keep your head up for task?
+    subtasks?: SubTask[],
+    due_date?: string,
 }
 
 export interface UpdateSelectingPayload {

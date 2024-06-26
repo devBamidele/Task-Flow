@@ -64,13 +64,13 @@ const styles = StyleSheet.create({
         borderWidth: StyleSheet.hairlineWidth * 1.5,
     },
     textContainer: {
-        //marginTop: 2,
+       marginBottom: 3,
         flex: 1,
         flexShrink: 1,
         alignSelf: "center"
     },
     title: {
-        fontSize: ms(10),
+        fontSize: ms(11),
         color: addOpacity(Colors.black, 0.7),
     },
     arrowIcon: {

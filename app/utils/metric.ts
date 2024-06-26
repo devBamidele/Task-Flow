@@ -1,6 +1,6 @@
 import { Dimensions, ScaledSize } from 'react-native';
 
-const { width, height }: ScaledSize = Dimensions.get('window');
+export const { width, height }: ScaledSize = Dimensions.get('window');
 
 const guidelineBaseWidth: number = 393;
 const guidelineBaseHeight: number = 851;

@@ -27,7 +27,7 @@ function validateName(name: string) {
 }
 
 
-function validatePassword(password : string) {
+function validatePassword(password: string) {
     if (password.length < 8) {
         return 'Password should be at least 8 characters long';
     }
@@ -53,8 +53,19 @@ function isError<T extends BaseError>(error: any): error is T {
 
 type ErrorCode = Partial<GoogleSignInError>;
 
-function isGoogleSignInError(error : any): error is ErrorCode {
+function isGoogleSignInError(error: any): error is ErrorCode {
     return (error as ErrorCode).code !== undefined;
+}
+
+function getDate(date?: Date | string): string {
+    if (date instanceof Date) {
+        return date.toDateString();
+    }
+
+    if (typeof date === "string") {
+        return new Date(date).toDateString();
+    }
+    return new Date().toDateString();
 }
 
 export {
@@ -63,4 +74,5 @@ export {
     validatePassword,
     isError,
     isGoogleSignInError,
+    getDate,
 }

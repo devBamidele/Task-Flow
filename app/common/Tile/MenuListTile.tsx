@@ -72,7 +72,7 @@ const styles = ScaledSheet.create({
         margin: 8,
     },
     countContainer: {
-        backgroundColor: Colors.numberContainer,
+        backgroundColor: Colors.selectedTile,
         alignItems: 'center',
         borderRadius: 4,
         margin: 8,

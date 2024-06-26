@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { Task, SubTask, UpdateTaskPayload, UpdateSelectingPayload } from "./service.types";
 import { tasksApi } from "./service";
 import { RootState } from "../store";
@@ -10,13 +10,11 @@ interface TaskData {
     selected: string[];
 }
 
-
 const initialState: TaskData = {
     data: [],
     hasCache: false,
     selected: [],
 };
-
 
 const resetTaskState = (state: TaskData) => initialState;
 
@@ -25,20 +23,18 @@ const taskSlice = createSlice({
     initialState,
     reducers: {
         updateTasks: (state, action: PayloadAction<UpdateTaskPayload>) => {
-            const { _id, title, description, subtasks } = action.payload;
+            const { _id, ...updates } = action.payload;
+            const task = state.data.find(task => task._id === _id);
 
-            const taskIndex = state.data.findIndex((task) => task._id === _id);
-
-            if (taskIndex !== -1) {
-                if (title) state.data[taskIndex].title = title;
-                if (description) state.data[taskIndex].description = description;
-                if (subtasks) state.data[taskIndex].subtasks = subtasks;
+            if (task) {
+                Object.assign(task, updates);
+                task.needsSync = true;
             }
         },
 
-        updateSelecting: (state: TaskData, action: PayloadAction<UpdateSelectingPayload>) => {
+        updateSelecting: (state, action: PayloadAction<UpdateSelectingPayload>) => {
             const { id, add } = action.payload;
-            
+
             if (add) {
                 if (!state.selected.includes(id)) {
                     state.selected.push(id);
@@ -49,6 +45,15 @@ const taskSlice = createSlice({
                     state.selected.splice(index, 1);
                 }
             }
+        },
+
+        markTasksAsSynced: (state, action: PayloadAction<string[]>) => {
+            action.payload.forEach(id => {
+
+                const task = state.data.find(task => task._id === id);
+
+                if (task) task.needsSync = false;
+            });
         },
 
         clearSelecting: (state) => {
@@ -88,6 +93,9 @@ export const hasData = (state: RootState) => state.task.hasCache;
 export const isSelecting = (state: RootState) => state.task.selected.length > 0;
 export const getSelectedTiles = (state: RootState) => state.task.selected;
 
-export const { updateTasks, clearTasks, updateSelecting, clearSelecting } = taskSlice.actions;
+export const getUnSyncedTasks = createSelector([getTasks], 
+    tasks => tasks.filter(task => task.needsSync));
+
+export const { updateTasks, clearTasks, updateSelecting, clearSelecting, markTasksAsSynced } = taskSlice.actions;
 
 export default taskSlice.reducer;

@@ -53,7 +53,7 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.mainView}>
-            <View style={[styles.mainView, { paddingHorizontal: 10 }]} >
+            <View style={[{ paddingHorizontal: 6 }]} >
 
                 <View style={styles.backButton}>
                     <Pressable onPress={navigation.toggleDrawer} >
@@ -100,23 +100,20 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
                         </AppText>
                     </View>
                 }
+            </View>
 
-                <View style={styles.taskList}>
-                    <FlatList
-                        data={tasks}
-                        keyExtractor={(task) => task._id}
-                        renderItem={({ item, index }) => (
-                            <TaskTile item={item} index={index} navigation={navigation} route={route} />
-                        )}
-                        refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                        }
-                        ItemSeparatorComponent={() => <View style={styles.seperator} />}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
-
-
+            <View style={styles.taskList}>
+                <FlatList
+                    data={tasks}
+                    keyExtractor={(task) => task._id}
+                    renderItem={({ item, index }) => (
+                        <TaskTile item={item} index={index} navigation={navigation} route={route} />
+                    )}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
         </SafeAreaView>
     )
@@ -174,7 +171,7 @@ const styles = StyleSheet.create({
     },
 
     taskList: {
-        marginHorizontal: 4
+        marginHorizontal: 0
     }
 
 })

@@ -1,6 +1,7 @@
 import Endpoints from "@/app/api/endpoints";
 import { api } from "../api";
 import { AddTaskPayload, AddTaskResponse, Task, TaskResponse, UpdateTaskPayload, UpdateTaskResponse } from "./service.types";
+import { MetaData } from "../auth/service.types";
 
 const taskType = 'Tasks';
 const id = 'LIST';
@@ -10,11 +11,11 @@ export const tasksApi = api.injectEndpoints({
         getAll: builder.query<Task[], void>({
             query: () => Endpoints.taskGetAll,
 
-            providesTags: (result) => 
+            providesTags: (result) =>
                 result
                     ? [
                         ...result.map(({ _id }) => ({ type: 'Tasks' as const, id: _id })),
-                        ...result.flatMap(task => 
+                        ...result.flatMap(task =>
                             task.subtasks?.map(subtask => ({ type: 'SubTasks' as const, id: subtask._id })) ?? []
                         ),
                         { type: taskType, id },
@@ -29,15 +30,19 @@ export const tasksApi = api.injectEndpoints({
             invalidatesTags: [{ type: taskType, id }]
         }),
 
-        update: builder.mutation<UpdateTaskResponse, UpdateTaskPayload>({
+        update: builder.mutation<UpdateTaskResponse, { data: UpdateTaskPayload[] }>({
             query: (body) => ({ url: Endpoints.taskUpdate, method: 'PATCH', body }),
 
-            invalidatesTags: (_result, _error, { _id, subtasks }) => [
-                { type: taskType, id: _id },
-                ...(subtasks?.map(subtask => ({ type: 'SubTasks' as const, id: subtask._id })) ?? []),
-                { type: taskType, id }
-            ]
-        })
+            invalidatesTags: (_result, _error, payloads) => {
+                const tags = payloads.data.flatMap(({ _id, subtasks }) => [
+                    { type: 'Tasks' as const, id: _id },
+                    ...(subtasks?.map(subtask => ({ type: 'SubTasks' as const, id: subtask._id })) ?? []),
+                ]);
+
+                // Optionally, you can add unique tags or other logic here if needed
+                return tags;
+            }
+        }),
     })
 });
 

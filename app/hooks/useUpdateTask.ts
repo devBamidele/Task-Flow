@@ -14,23 +14,6 @@ const useUpdateTask = () => {
         params.next();
 
         dispatch(updateTasks(params.data));
-
-        
-
-        // fetch().then(state => {
-        //     console.log("Connection type", state.type);
-        //     console.log("Is connected?", state.isConnected);
-        // });
-
-
-        // update(params.data).unwrap()
-        //     .then((res) => {
-
-        //         params.next();
-        //     }).catch((err) => {
-
-        //         console.log(JSON.stringify(err))
-        //     })
     }
 
     return {

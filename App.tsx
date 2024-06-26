@@ -13,14 +13,15 @@ import { appStore, persistor } from './app/redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import NetworkConnectivity from './app/common/Network/NetworkConnectivity';
 import { fontConfig } from './app/utils';
+import { useSyncTasks } from './app/hooks';
 
 export { ErrorBoundary } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function App() {
+export default function AppWrapper() {
   const [loaded, error] = useFonts(fontConfig);
-  
+
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -38,10 +39,23 @@ export default function App() {
   return (
     <Provider store={appStore}>
       <PersistGate persistor={persistor}>
-        <BaseStack />
-        <Toast config={toastConfig}/>
-        {/* <NetworkConnectivity/> */}
+        <App />
       </PersistGate>
     </Provider>
+  );
+
+}
+
+function App() {
+
+  useSyncTasks();
+
+  return (
+    <>
+      <BaseStack />
+      <Toast config={toastConfig} />
+      {/* <NetworkConnectivity/> */}
+    </>
+
   );
 }

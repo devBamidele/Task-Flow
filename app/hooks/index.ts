@@ -3,7 +3,7 @@ import useUpdateTask from "./useUpdateTask";
 import useSignupUser from "./useSignupUser";
 import useLoginUser from "./useLoginUser";
 import useCreateTask from "./useCreateTask";
-
+import useSyncTasks from "./useSyncTasks";
 
 export {
     useLoginUser,
@@ -11,5 +11,6 @@ export {
     useAppSelector,
     useUpdateTask,
     useSignupUser,
-    useCreateTask
+    useCreateTask,
+    useSyncTasks,
 }

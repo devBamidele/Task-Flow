@@ -20,6 +20,7 @@ const Colors = {
 
     selectionColor : '#C2C2C2',
 
+    blue: "#D1EAED",
 
     gray : "#616161",
 

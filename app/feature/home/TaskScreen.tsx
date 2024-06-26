@@ -5,13 +5,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { AddTaskButton, AppButton, AppScrollView, AppText, AppTextInput, OutlinedButton, SubTaskTile, SubtaskTextInput } from '@/app/common';
-import { Colors, addOpacity, weight } from '@/app/utils';
+import { Colors, addOpacity, getDate, weight } from '@/app/utils';
 import useCreateTask from '@/app/hooks/useCreateTask';
 import useUpdateTask from '@/app/hooks/useUpdateTask';
 import { ms, mvs } from 'react-native-size-matters';
 import DrawerTextInput from '@/app/common/TextInput/DrawerTextInput';
-import { SubTask, Task } from '@/app/redux/tasks/service.types';
+import { SubTask, Task, UpdateTaskPayload } from '@/app/redux/tasks/service.types';
 import _, { has } from 'lodash';
+import Row from '@/app/common/Row/Row';
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBack } }) => {
     const isUpdate = params !== undefined;
@@ -30,6 +32,14 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
 
     const { createTask, isCreatingTask } = useCreateTask();
     const { updateTask, isUpdatingTask } = useUpdateTask();
+
+    const [selectedDate, setSelectedDate] = useState(params?.due_date ?? getDate());
+
+    const handleDateChange = (event: DateTimePickerEvent, date: Date | undefined) => {
+        if (date) {
+            setSelectedDate(getDate(date));
+        }
+    };
 
     const saveSubTasks = () => {
         if (newSubTask.trim() === '') {
@@ -71,7 +81,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
         const trimmedDescription = description.trim();
 
         if (isUpdate) {
-            const updatedFields: Partial<Task> = {};
+            const updatedFields: Partial<UpdateTaskPayload> = {};
 
             if (params?.title !== trimmedTitle) {
                 updatedFields.title = trimmedTitle;
@@ -85,13 +95,22 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                 updatedFields.subtasks = subtasks;
             }
 
+            if (params?.due_date !== selectedDate) {
+                updatedFields.due_date = selectedDate;
+            }
+
             updateTask({
                 data: { _id: params?._id, ...updatedFields },
                 next: goBack,
             });
         } else {
             createTask({
-                data: { title: trimmedTitle, description: trimmedDescription },
+                data: {
+                    title: trimmedTitle,
+                    description: trimmedDescription,
+                    subtasks,
+                    due_date: new Date(selectedDate)
+                },
                 next: goBack,
             });
         }
@@ -101,14 +120,15 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
     useEffect(() => {
         const hasTextChanged = params?.title !== title || params?.description !== description;
         const hasSubtasksChanged = !_.isEqual(params?.subtasks, subtasks);
+        const hasDateChanged = params?.due_date !== selectedDate;
 
         if (isUpdate) {
-            setIsDisabled(title.length < 3 ? true : !(hasTextChanged || (title.length >= 3 && hasSubtasksChanged)));
+            setIsDisabled(title.length < 3 ? true : !(hasTextChanged || hasSubtasksChanged || hasDateChanged));
         } else {
             setIsDisabled(title.length < 3);
         }
 
-    }, [title, description, params, isUpdate, subtasks]);
+    }, [title, description, params, isUpdate, subtasks, selectedDate]);
 
 
     // useEffect(() => {
@@ -162,23 +182,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                             editable={!isCreatingTask && !isUpdatingTask}
                         />
                     </View>
-                    <View style={{ paddingHorizontal: 12, paddingTop: 4, gap: 10 }}>
-                        <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
-                            <AppText style={styles.subText}>
-                                List
-                            </AppText>
-                        </View>
-                        <View style={{ flexDirection: "row" }}>
-                            <AppText style={styles.subText}>
-                                Due date
-                            </AppText>
-                        </View>
-                        <View style={{ flexDirection: "row" }}>
-                            <AppText style={styles.subText}>
-                                Tags
-                            </AppText>
-                        </View>
-                    </View>
+                    <Row selectedDate={new Date(selectedDate)} onDateChange={handleDateChange} />
                     <View style={styles.headerRow}>
                         <AppText fontWeight={weight.M} style={styles.subHeaderText}>
                             Subtask:
@@ -198,7 +202,6 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                                 renderItem={({ item, index }) => (
                                     <SubTaskTile item={item} index={index} />
                                 )}
-                                ItemSeparatorComponent={() => <View style={styles.seperator} />}
                                 showsVerticalScrollIndicator={false}
                             />
                         </View>
@@ -282,7 +285,7 @@ const styles = StyleSheet.create({
         color: addOpacity(Colors.black, 0.8),
     },
     taskList: {
-        marginTop: 4,
+        marginTop: 8,
         marginHorizontal: 4,
     },
 

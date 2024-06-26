@@ -1,6 +1,6 @@
 export { default as Colors } from '@/app/utils/colors';
 
-export { validateName, validateEmail, validatePassword, isError, isGoogleSignInError } from '@/app/utils/helpers';
+export { validateName, validateEmail, validatePassword, isError, isGoogleSignInError, getDate } from '@/app/utils/helpers';
 
 export { horizontalScale, verticalScale,moderateScale } from '@/app/utils/metric';
 

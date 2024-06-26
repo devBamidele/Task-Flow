@@ -1,13 +1,13 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, Vibration } from 'react-native';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import Checkbox from 'expo-checkbox';
 import AppText from '../Text/AppText';
-import { Colors, TodayScreenProps, addOpacity } from '@/app/utils';
+import { Colors, TodayScreenProps, addOpacity, getDate } from '@/app/utils';
 import { Task } from '@/app/redux/tasks';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ms, s } from 'react-native-size-matters';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { getSelectedTiles, isSelecting, updateSelecting } from '@/app/redux/tasks/slice';
+import { getSelectedTiles, isSelecting, updateSelecting } from '@/app/redux/tasks';
 
 interface TaskTileProps extends TodayScreenProps {
     item: Task,
@@ -27,20 +27,23 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
 
     const onPress = useCallback(() => {
         if (select) {
-            onLongPress();
+            onLongPress(false);
             return;
         }
         navigation.navigate('Task', item);
     }, [select]);
 
-    const onLongPress = useCallback(() => {
-        setLongPressed((prev) => {
-            const add = !prev;
-            dispatch(updateSelecting({ id: item._id, add: add }));
-            return add;
-        });
+    const onLongPress = useCallback((shouldVibrate: boolean) => {
 
-    }, []);
+        setLongPressed((prev) => !prev);
+
+        dispatch(updateSelecting({ id: item._id, add: !longPressed }));
+
+        if (shouldVibrate) {
+            Vibration.vibrate(50);
+        }
+    }, [dispatch, item._id]);
+
 
     useEffect(() => {
         if (!select) {
@@ -53,8 +56,8 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
         <Pressable
             style={[styles.container, longPressed && styles.selectedStyle]}
             onPress={onPress}
-            delayLongPress={50}
-            onLongPress={onLongPress} >
+            delayLongPress={250}
+            onLongPress={() => onLongPress(true)} >
 
             <Pressable style={styles.checkBoxPressable} onPress={() => setChecked(!isChecked)} >
                 <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
@@ -75,29 +78,37 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
                     </AppText>
                 }
 
-                <View style={styles.subContainer}>
-                    <View style={styles.generic}>
-                        <Ionicons
-                            size={20}
-                            name={"calendar"}
-                            style={styles.icon}
-                        />
-                        <AppText style={styles.dateText}>
-                            22-03-22
-                        </AppText>
-                    </View>
 
+                <View style={styles.subContainer}>
+
+
+                    {
+                        item.due_date &&
+                        <>
+                            <View style={styles.generic}>
+                                <Ionicons
+                                    size={20}
+                                    name={"calendar"}
+                                    style={styles.icon}
+                                />
+                                <AppText style={styles.dateText}>
+                                    {getDate(item.due_date)}
+                                </AppText>
+                            </View>
+
+                            <View style={styles.divider} />
+                        </>
+
+                    }
 
 
                     {
                         item.subtasks && item.subtasks.length > 0 &&
                         <>
-                            <View style={styles.divider} />
-
                             <View style={styles.generic}>
                                 <View style={styles.countContainer}>
                                     <AppText style={styles.countText}>
-                                        {`${item.subtasks?.length}`}
+                                        {item.subtasks?.length}
                                     </AppText>
                                 </View>
 
@@ -105,10 +116,12 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
                                     Subtasks
                                 </AppText>
                             </View>
+
+                            <View style={styles.divider} />
                         </>
                     }
 
-                    <View style={styles.divider} />
+
 
                     <View style={styles.generic}>
                         <View style={[styles.square, { backgroundColor: 'yellow' }]} />
@@ -124,7 +137,6 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
                 size={22}
                 style={styles.arrowIcon}
                 name={"arrow-forward-outline"}
-                color={Colors.textColor4}
             />
         </Pressable>
     );
@@ -139,7 +151,7 @@ const styles = StyleSheet.create({
     },
 
     countContainer: {
-        backgroundColor: Colors.numberContainer,
+        backgroundColor: Colors.selectedTile,
         alignItems: 'center',
         borderRadius: 4,
         marginRight: ms(3),
@@ -154,7 +166,8 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         marginHorizontal: 4,
         paddingTop: 3,
-        paddingBottom: 10
+        paddingBottom: 10,
+        paddingHorizontal: 8,
     },
     checkBoxPressable: {
         paddingTop: 7,
@@ -199,6 +212,7 @@ const styles = StyleSheet.create({
         marginRight: 6,
         marginTop: 6,
         marginLeft: 12,
+        color: Colors.textColor4,
     },
 
     generic: {
@@ -210,7 +224,8 @@ const styles = StyleSheet.create({
         width: StyleSheet.hairlineWidth,
         height: '100%',
         backgroundColor: Colors.divider,
-        marginHorizontal: ms(10),
+        marginRight: ms(10),
+        marginLeft: ms(7),
         marginTop: ms(2),
     },
 
