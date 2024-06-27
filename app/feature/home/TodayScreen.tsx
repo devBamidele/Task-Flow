@@ -1,5 +1,5 @@
 import { ActivityIndicator, BackHandler, FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AddTaskButton, AppText, TaskTile } from '@/app/common';
@@ -7,10 +7,8 @@ import { Colors, TodayScreenProps, weight, moderateScale } from '@/app/utils';
 import { getTasks, hasData, useGetAllQuery } from '@/app/redux/tasks';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { onlineState } from '@/app/redux/user/slice';
-import { api } from '@/app/redux/api';
-import { tasksApi } from '@/app/redux/tasks/service';
 import { ms, mvs } from 'react-native-size-matters';
-import { clearSelecting, clearTasks, isSelecting } from '@/app/redux/tasks/slice';
+import { clearSelecting, isSelecting } from '@/app/redux/tasks/slice';
 import { useFocusEffect } from '@react-navigation/native';
 
 

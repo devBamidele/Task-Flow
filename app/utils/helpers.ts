@@ -57,15 +57,18 @@ function isGoogleSignInError(error: any): error is ErrorCode {
     return (error as ErrorCode).code !== undefined;
 }
 
-function getDate(date?: Date | string): string {
+function getDate(date?: Date | string, toIso: boolean = false): string {
+    let dateObject: Date;
+
     if (date instanceof Date) {
-        return date.toDateString();
+        dateObject = date;
+    } else if (typeof date === "string") {
+        dateObject = new Date(date);
+    } else {
+        dateObject = new Date();
     }
 
-    if (typeof date === "string") {
-        return new Date(date).toDateString();
-    }
-    return new Date().toDateString();
+    return toIso ? dateObject.toISOString() : dateObject.toDateString();
 }
 
 export {

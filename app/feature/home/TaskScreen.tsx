@@ -4,16 +4,14 @@ import { TaskScreenProps } from '@/app/utils/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SelectList } from 'react-native-dropdown-select-list';
-import { AddTaskButton, AppButton, AppScrollView, AppText, AppTextInput, OutlinedButton, SubTaskTile, SubtaskTextInput } from '@/app/common';
+import { AppButton, AppText, AppTextInput, OutlinedButton, SubTaskTile, SubtaskTextInput } from '@/app/common';
 import { Colors, addOpacity, getDate, weight } from '@/app/utils';
-import useCreateTask from '@/app/hooks/useCreateTask';
-import useUpdateTask from '@/app/hooks/useUpdateTask';
-import { ms, mvs } from 'react-native-size-matters';
-import DrawerTextInput from '@/app/common/TextInput/DrawerTextInput';
-import { SubTask, Task, UpdateTaskPayload } from '@/app/redux/tasks/service.types';
-import _, { has } from 'lodash';
+import { ms } from 'react-native-size-matters';
+import { SubTask, UpdateTaskPayload } from '@/app/redux/tasks/service.types';
+import _ from 'lodash';
 import Row from '@/app/common/Row/Row';
-import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { useCreateTask, useUpdateTask } from '@/app/hooks';
 
 const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBack } }) => {
     const isUpdate = params !== undefined;
@@ -31,7 +29,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
     const [selected, setSelected] = useState<string>("");
 
     const { createTask, isCreatingTask } = useCreateTask();
-    const { updateTask, isUpdatingTask } = useUpdateTask();
+    const { updateTask } = useUpdateTask();
 
     const [selectedDate, setSelectedDate] = useState(params?.due_date ?? getDate());
 
@@ -47,7 +45,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
         }
 
         const newSubtaskObject: SubTask = {
-            _id: new Date().toISOString(),
+            _id: getDate(undefined, true),
             task: newSubTask.trim(),
         };
 
@@ -96,7 +94,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
             }
 
             if (params?.due_date !== selectedDate) {
-                updatedFields.due_date = selectedDate;
+                updatedFields.due_date = getDate(selectedDate, true);
             }
 
             updateTask({
@@ -168,7 +166,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                             returnKeyType="next"
                             isTask={true}
                             onSubmitEditing={() => descriptionRef.current?.focus()}
-                            editable={!isCreatingTask && !isUpdatingTask}
+                            editable={!isCreatingTask}
                         />
                         <AppTextInput
                             assignRef={descriptionRef}
@@ -179,7 +177,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                             isTask={true}
                             textAlignVertical="top"
                             numberOfLines={6}
-                            editable={!isCreatingTask && !isUpdatingTask}
+                            editable={!isCreatingTask}
                         />
                     </View>
                     <Row selectedDate={new Date(selectedDate)} onDateChange={handleDateChange} />
@@ -215,7 +213,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                             <OutlinedButton
                                 onPress={confirmDelete}
                                 buttonText={'Delete task'}
-                                isLoading={isUpdate ? isUpdatingTask : isCreatingTask}
+                                isLoading={isCreatingTask}
                                 paddingBottom={10}
                                 paddingHorizontal={0}
                                 style={{ flex: 1 }}
@@ -227,7 +225,7 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                     <AppButton
                         onPress={onPress}
                         buttonText={isUpdate ? 'Save changes' : 'Create'}
-                        isLoading={isUpdate ? isUpdatingTask : isCreatingTask}
+                        isLoading={isCreatingTask}
                         isDisabled={isDisabled}
                         isOutlined={true}
                         paddingBottom={10}

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import AppText from '../Text/AppText';
-import { Colors, addOpacity, weight } from '@/app/utils';
+import { Colors, addOpacity, weight, width } from '@/app/utils';
 import { ms } from 'react-native-size-matters';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { DateTimePickerAndroid, DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { width } from '@/app/utils/metric';
+import AppText from '../Text/AppText';
 
 interface RowProps {
     selectedDate: Date,

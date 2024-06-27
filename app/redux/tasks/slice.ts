@@ -8,12 +8,14 @@ interface TaskData {
     data: Task[];
     hasCache: boolean;
     selected: string[];
+    unsyncedTasks: UpdateTaskPayload[];
 }
 
 const initialState: TaskData = {
     data: [],
     hasCache: false,
     selected: [],
+    unsyncedTasks: [],
 };
 
 const resetTaskState = (state: TaskData) => initialState;
@@ -28,7 +30,17 @@ const taskSlice = createSlice({
 
             if (task) {
                 Object.assign(task, updates);
-                task.needsSync = true;
+
+                const existingUnsyncedIndex = state.unsyncedTasks.findIndex(item => item._id === _id);
+
+                if (existingUnsyncedIndex !== -1) {
+                    state.unsyncedTasks[existingUnsyncedIndex] = {
+                        ...state.unsyncedTasks[existingUnsyncedIndex],
+                        ...updates,
+                    };
+                } else {
+                    state.unsyncedTasks.push(action.payload);
+                }
             }
         },
 
@@ -49,10 +61,11 @@ const taskSlice = createSlice({
 
         markTasksAsSynced: (state, action: PayloadAction<string[]>) => {
             action.payload.forEach(id => {
+                const index = state.unsyncedTasks.findIndex(task => task._id === id);
 
-                const task = state.data.find(task => task._id === id);
-
-                if (task) task.needsSync = false;
+                if (index !== -1) {
+                    state.unsyncedTasks.splice(index, 1);
+                }
             });
         },
 
@@ -92,9 +105,12 @@ export const getTasks = (state: RootState) => state.task.data;
 export const hasData = (state: RootState) => state.task.hasCache;
 export const isSelecting = (state: RootState) => state.task.selected.length > 0;
 export const getSelectedTiles = (state: RootState) => state.task.selected;
+export const getUnSyncedTasks = (state: RootState) => state.task.unsyncedTasks;
 
-export const getUnSyncedTasks = createSelector([getTasks], 
-    tasks => tasks.filter(task => task.needsSync));
+// export const getUnSyncedTasks = createSelector(
+//     [getTasks],
+//     tasks => tasks.filter(task => task.needsSync)
+// );
 
 export const { updateTasks, clearTasks, updateSelecting, clearSelecting, markTasksAsSynced } = taskSlice.actions;
 
