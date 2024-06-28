@@ -3,11 +3,10 @@ import { StyleSheet, View, Pressable, TouchableOpacity, ActivityIndicator } from
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { AppButton, AppScrollView, AppText, AppTextInput, DismissKeyboard } from '@/app/common';
-import { Colors, LoginScreenProps, horizontalScale, verticalScale } from '@/app/utils';
+import { AppButton, AppScrollView, AppText, AppTextInput } from '@/app/common';
+import { Colors, LoginScreenProps, horizontalScale, verticalScale, weight } from '@/app/utils';
 import { useForm } from './useForm';
-import { weight } from '@/app/utils/types';
-import { useAppSelector, useLoginUser } from '@/app/hooks';
+import { useLoginUser } from '@/app/hooks';
 import { moderateScale, ms, mvs, s } from 'react-native-size-matters';
 import useGoogleLogin from './useGoogleLogin';
 
@@ -40,6 +39,8 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
             })
         }
     }
+
+    const signUp = () => { navigate('SignUp'); clearForm(); }
 
     return (
         <SafeAreaView style={styles.mainView}>
@@ -116,12 +117,12 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
                         </Pressable>
                     </View>
 
-
-                    <AppButton
-                        onPress={onSubmit}
+                    {/* Continue button */}
+                    <AppButton onPress={onSubmit}
                         buttonText="Continue"
                         isLoading={isLoading}
                         isDisabled={isGloading}
+                        style={styles.button}
                     />
 
                     {/* Sign Up View */}
@@ -129,9 +130,7 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
                         <AppText fontWeight={weight.L} style={styles.secondaryText}>
                             Don't have an account ?
                         </AppText>
-                        <TouchableOpacity activeOpacity={0.6}
-                            onPress={() => { navigate('SignUp'); clearForm() }}
-                        >
+                        <TouchableOpacity activeOpacity={0.6} onPress={signUp}>
                             <AppText fontWeight={weight.M} style={styles.signUpText}>
                                 Sign Up
                             </AppText>
@@ -143,7 +142,7 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
                         <View style={styles.separator} />
 
                         <View style={{ marginHorizontal: 6 }}>
-                            <AppText fontWeight={weight.M} style={[styles.secondaryText, { fontSize: 14 }]}>
+                            <AppText fontWeight={weight.M} style={styles.continueWith}>
                                 Or continue with
                             </AppText>
                         </View>
@@ -155,18 +154,10 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
                     <TouchableOpacity onPress={handleGoogleLogin} activeOpacity={0.6} style={styles.googleButton}>
                         {
                             isGloading ?
-                                <ActivityIndicator
-                                    color={Colors.textColor1}
-                                    size={moderateScale(20)}
-                                />
+                                <ActivityIndicator color={Colors.textColor1} size={moderateScale(20)} />
                                 :
-                                <Ionicons
-                                    size={25}
-                                    name="logo-google"
-                                    color={Colors.textColor1}
-                                />
+                                <Ionicons size={25} name="logo-google" color={Colors.textColor1} />
                         }
-
                     </TouchableOpacity>
 
                 </View>
@@ -180,9 +171,8 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
 
-    snackText: {
-        color: Colors.white,
-        textAlign: "center",
+    button: {
+        paddingHorizontal: 12,
     },
 
     errorText: {
@@ -252,7 +242,6 @@ const styles = StyleSheet.create({
         paddingTop: verticalScale(17)
     },
 
-
     secondaryText: {
         color: Colors.hintTextColor,
         fontSize: 15,
@@ -268,9 +257,12 @@ const styles = StyleSheet.create({
     forgotPassword: {
         color: Colors.primary,
         textAlign: "right",
-
         fontSize: 13,
         paddingHorizontal: 12,
-        paddingVertical: 8
+    },
+
+    continueWith: {
+        fontSize: 14,
+        color: Colors.hintTextColor,
     },
 })

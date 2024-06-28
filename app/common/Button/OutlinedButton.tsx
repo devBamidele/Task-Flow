@@ -1,10 +1,8 @@
 import { ActivityIndicator, StyleSheet, TextStyle, TouchableOpacity, View, ViewProps } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { FC } from 'react'
-import Colors from '../../utils/colors'
 import AppText from '../Text/AppText'
-import { moderateScale, verticalScale } from '../../utils/metric';
-import { weight } from '@/app/utils';
+import { Colors, moderateScale, verticalScale, weight } from '@/app/utils';
 import { ms, mvs } from 'react-native-size-matters';
 
 type onPress = () => void;
@@ -41,8 +39,8 @@ const OutlinedButton: FC<OutlinedButtonProps> = ({
                 paddingHorizontal: paddingHorizontal ?? 20,
                 paddingBottom: paddingBottom ?? 24,
                 marginTop: marginTop ?? verticalScale(40),
-            },  otherProps.style ]}
-           
+            }, otherProps.style]}
+
         >
             <TouchableOpacity
                 disabled={isLoading || isDisabled}
@@ -58,10 +56,8 @@ const OutlinedButton: FC<OutlinedButtonProps> = ({
 
                 {
                     isLoading ?
-                        <ActivityIndicator
-                            color={Colors.white}
-                            size={moderateScale(22)}
-                        /> :
+                        <ActivityIndicator color={Colors.white} size={moderateScale(22)} />
+                        :
                         <AppText
                             fontWeight={textStyle == null ? weight.Sb : weight.R}
                             style={textStyle ?? styles.buttonText}>
@@ -69,10 +65,12 @@ const OutlinedButton: FC<OutlinedButtonProps> = ({
                         </AppText>
                 }
 
-                {showNext ? <Ionicons
-                    size={20}
-                    name={"arrow-forward-outline"}
-                    color={Colors.white} /> : <View style={styles.shrinkBox} />}
+                {showNext ?
+                    <Ionicons
+                        size={20}
+                        name={"arrow-forward-outline"}
+                        color={Colors.white} /> : <View style={styles.shrinkBox} />
+                }
 
             </TouchableOpacity>
         </View>
@@ -84,6 +82,9 @@ export default OutlinedButton
 const styles = StyleSheet.create({
     buttonView: {
         width: "100%",
+
+        backgroundColor: Colors.blue
+
     },
 
     button: {
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderColor: Colors.primary,
         borderWidth: StyleSheet.hairlineWidth,
+        //backgroundColor: addOpacity(Colors.white, 0.6),
 
         //iOS
         shadowOffset: { width: 0, height: 8 },
@@ -109,6 +111,7 @@ const styles = StyleSheet.create({
     shrinkBox: {
         width: 28,
         height: 28,
+
     },
 
     buttonText: {

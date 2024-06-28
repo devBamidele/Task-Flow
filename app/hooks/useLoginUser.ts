@@ -38,7 +38,7 @@ const useLoginUser = () => {
                 } else {
                     showToast({
                         title: 'Network Error',
-                        message: err.error,
+                        message: 'Check your internet connection and try again',
                     });
                 }
             });
