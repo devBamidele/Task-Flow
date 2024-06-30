@@ -1,14 +1,16 @@
-import { Pressable, StyleSheet, View, Vibration } from 'react-native';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { Pressable, StyleSheet, View, Vibration, Animated } from 'react-native';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import Checkbox from 'expo-checkbox';
 import AppText from '../Text/AppText';
 import { Colors, TodayScreenProps, addOpacity, getDate, width } from '@/app/utils';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { ms, s } from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { getSelectedTiles, isSelecting, updateSelecting, Task } from '@/app/redux/tasks';
 import { Swipeable } from 'react-native-gesture-handler';
-import LeftAction from './LeftAction';
+import LeftAction from '../Action/LeftAction';
+import { DateChip, ListChip, SubTaskChip } from '../Chip';
+import { deleteTasks } from '@/app/redux/tasks/slice';
 
 interface TaskTileProps extends TodayScreenProps {
     item: Task,
@@ -19,7 +21,6 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
     const dispatch = useAppDispatch();
     const select = useAppSelector(isSelecting);
     const selectedTiles = useAppSelector(getSelectedTiles);
-
     const initialLongPressed = selectedTiles.some(tileId => tileId === item._id);
 
     const [isChecked, setChecked] = useState(false);
@@ -39,9 +40,8 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
 
         dispatch(updateSelecting({ id: item._id, add: !longPressed }));
 
-        if (shouldVibrate) {
-            Vibration.vibrate(50);
-        }
+        if (shouldVibrate) { Vibration.vibrate(50) }
+
     }, [dispatch, item._id]);
 
 
@@ -53,93 +53,80 @@ const TaskTile: FC<TaskTileProps> = ({ item, index, navigation }) => {
 
     const handleSwipeableOpen = (direction: string) => {
         if (direction === 'left') {
-            console.log('OMg this feels soo chaotic !!')
+            //dispatch(deleteTasks([item._id]))
+
+            console.log(`Deleted ${JSON.stringify(item.title)}`)
         }
     };
 
 
     return (
         <Swipeable
-            renderLeftActions={(progess, drag, swipe) => (
-                <LeftAction
-                    progressAnimatedValue={progess}
-                    dragAnimatedValue={drag}
-                    swipeable={swipe}
-                />
-            )}
+            renderLeftActions={(progess, drag, swipe) => {
+
+                //console.log(progess);
+
+                return (
+                    <LeftAction
+                        progressAnimatedValue={progess}
+                        dragAnimatedValue={drag}
+                        swipeable={swipe}
+                        id={item._id}
+                    />
+                )
+            }}
             onSwipeableOpen={handleSwipeableOpen}
-            friction={2}
+            friction={1.5}
             leftThreshold={width / 4}
         >
-            <Pressable
-                style={[styles.container, longPressed && styles.selectedStyle]}
-                onPress={onPress}
-                delayLongPress={250}
-                onLongPress={() => onLongPress(true)}
-            >
-                <Pressable style={styles.checkBoxPressable} onPress={() => setChecked(!isChecked)} >
-                    <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
-                </Pressable>
-                <View style={styles.textContainer}>
-                    <AppText
-                        numberOfLines={1}
-                        style={styles.title}
-                        key={item._id}
-                    >
-                        {item.title}
-                    </AppText>
-                    {item.description.length > 0 &&
-                        <AppText numberOfLines={1} style={styles.desc} >
-                            {item.description}
+            <Animated.View>
+                <Pressable
+                    style={[styles.container, longPressed && styles.selectedStyle]}
+                    onPress={onPress}
+                    delayLongPress={250}
+                    onLongPress={() => onLongPress(true)}
+                >
+                    <Pressable style={styles.checkBoxPressable} onPress={() => setChecked(!isChecked)} >
+                        <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+                    </Pressable>
+                    <View style={styles.textContainer}>
+                        <AppText
+                            numberOfLines={1}
+                            style={styles.title}
+                            key={item._id}
+                        >
+                            {item.title}
                         </AppText>
-                    }
-                    <View style={styles.subContainer}>
-                        {
-                            item.due_date &&
-                            <>
-                                <View style={styles.generic}>
-                                    <Ionicons
-                                        size={20}
-                                        name={"calendar"}
-                                        style={styles.icon}
-                                    />
-                                    <AppText style={styles.dateText}>
-                                        {getDate(item.due_date)}
-                                    </AppText>
-                                </View>
-                                <View style={styles.divider} />
-                            </>
-                        }
-                        {
-                            item.subtasks && item.subtasks.length > 0 &&
-                            <>
-                                <View style={styles.generic}>
-                                    <View style={styles.countContainer}>
-                                        <AppText style={styles.countText}>
-                                            {item.subtasks?.length}
-                                        </AppText>
-                                    </View>
-                                    <AppText style={styles.dateText}>
-                                        Subtasks
-                                    </AppText>
-                                </View>
-                                <View style={styles.divider} />
-                            </>
-                        }
-                        <View style={styles.generic}>
-                            <View style={[styles.square, { backgroundColor: 'yellow' }]} />
-                            <AppText style={styles.dateText}>
-                                List 1
+                        {item.description.length > 0 &&
+                            <AppText numberOfLines={1} style={styles.desc} >
+                                {item.description}
                             </AppText>
+                        }
+                        <View style={styles.subContainer}>
+                            {
+                                item.due_date &&
+                                <>
+                                    <DateChip date={getDate(item.due_date)} />
+                                    <View style={styles.divider} />
+                                </>
+                            }
+                            {
+                                item.subtasks && item.subtasks.length > 0 &&
+                                <>
+                                    <SubTaskChip length={item.subtasks?.length} />
+                                    <View style={styles.divider} />
+                                </>
+                            }
+                            <ListChip />
                         </View>
                     </View>
-                </View>
-                <Ionicons
-                    size={22}
-                    style={styles.arrowIcon}
-                    name={"arrow-forward-outline"}
-                />
-            </Pressable>
+                    <Ionicons
+                        size={22}
+                        style={styles.arrowIcon}
+                        name={"arrow-forward-outline"}
+                    />
+                </Pressable>
+            </Animated.View>
         </Swipeable>
     );
 }
@@ -151,18 +138,6 @@ const styles = StyleSheet.create({
     selectedStyle: {
         backgroundColor: addOpacity(Colors.listTextBackground, 1),
     },
-
-    countContainer: {
-        backgroundColor: Colors.selectedTile,
-        alignItems: 'center',
-        borderRadius: 4,
-        marginRight: ms(3),
-        marginTop: ms(2),
-        width: ms(24),
-    },
-    countText: {
-        fontSize: ms(10),
-    },
     container: {
         flexDirection: 'row',
         alignItems: "flex-start",
@@ -170,6 +145,7 @@ const styles = StyleSheet.create({
         paddingTop: 3,
         paddingBottom: 10,
         paddingHorizontal: 8,
+        backgroundColor: Colors.white
     },
     checkBoxPressable: {
         paddingTop: 7,
@@ -201,25 +177,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingTop: 3
     },
-    icon: {
-        paddingLeft: s(3),
-        paddingRight: ms(3),
-        color: Colors.textColor3,
-    },
-    dateText: {
-        fontSize: ms(11),
-        color: addOpacity(Colors.black, 0.7),
-    },
     arrowIcon: {
         marginRight: 6,
         marginTop: 6,
         marginLeft: 12,
         color: Colors.textColor4,
-    },
-
-    generic: {
-        flexDirection: "row",
-        alignItems: "center",
     },
 
     divider: {
@@ -229,14 +191,6 @@ const styles = StyleSheet.create({
         marginRight: ms(10),
         marginLeft: ms(7),
         marginTop: ms(2),
-    },
-
-    square: {
-        width: ms(13),
-        height: ms(13),
-        borderRadius: 4,
-        marginTop: ms(2),
-        marginRight: ms(4),
     },
 
 });

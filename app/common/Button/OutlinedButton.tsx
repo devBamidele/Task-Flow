@@ -2,7 +2,7 @@ import { ActivityIndicator, StyleSheet, TextStyle, TouchableOpacity, View, ViewP
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { FC } from 'react'
 import AppText from '../Text/AppText'
-import { Colors, moderateScale, verticalScale, weight } from '@/app/utils';
+import { Colors, addOpacity, moderateScale, verticalScale, weight } from '@/app/utils';
 import { ms, mvs } from 'react-native-size-matters';
 
 type onPress = () => void;
@@ -11,7 +11,6 @@ interface OutlinedButtonProps extends ViewProps {
     onPress?: onPress;
     buttonText: string;
     showNext?: boolean;
-    shadow?: number;
     isLoading?: boolean;
     isDisabled?: boolean;
     paddingHorizontal?: number;
@@ -23,7 +22,6 @@ const OutlinedButton: FC<OutlinedButtonProps> = ({
     onPress,
     buttonText,
     showNext = false,
-    shadow = 20,
     paddingHorizontal,
     paddingBottom,
     textStyle,
@@ -49,7 +47,6 @@ const OutlinedButton: FC<OutlinedButtonProps> = ({
                 style={[
                     styles.button,
                     (isLoading || isDisabled) && styles.loadingButton,
-                    { elevation: shadow }
                 ]}>
 
                 <View style={styles.shrinkBox} />
@@ -59,7 +56,7 @@ const OutlinedButton: FC<OutlinedButtonProps> = ({
                         <ActivityIndicator color={Colors.white} size={moderateScale(22)} />
                         :
                         <AppText
-                            fontWeight={textStyle == null ? weight.Sb : weight.R}
+                            fontWeight={ weight.Sb}
                             style={textStyle ?? styles.buttonText}>
                             {buttonText}
                         </AppText>
@@ -82,9 +79,6 @@ export default OutlinedButton
 const styles = StyleSheet.create({
     buttonView: {
         width: "100%",
-
-        backgroundColor: Colors.blue
-
     },
 
     button: {
@@ -95,13 +89,8 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: "center",
         borderColor: Colors.primary,
-        borderWidth: StyleSheet.hairlineWidth,
-        //backgroundColor: addOpacity(Colors.white, 0.6),
-
-        //iOS
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
+        borderWidth: StyleSheet.hairlineWidth * 1.5,
+        backgroundColor: Colors.white,
     },
 
     loadingButton: {
@@ -111,12 +100,11 @@ const styles = StyleSheet.create({
     shrinkBox: {
         width: 28,
         height: 28,
-
     },
 
     buttonText: {
         textAlign: "center",
-        color: Colors.primary,
+        color: addOpacity(Colors.primary, .9),
         fontSize: ms(13),
     }
 })

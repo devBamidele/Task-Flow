@@ -211,14 +211,13 @@ const TaskScreen: FC<TaskScreenProps> = ({ route: { params }, navigation: { goBa
                     {isUpdate &&
                         <>
                             <OutlinedButton
-                                onPress={confirmDelete}
+                                onPress={() => {}}
                                 buttonText={'Delete task'}
-                                isLoading={isCreatingTask}
+                                isLoading={false}
                                 paddingBottom={10}
                                 paddingHorizontal={0}
                                 style={{ flex: 1 }}
                             />
-
                         </>
                     }
 

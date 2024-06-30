@@ -69,6 +69,16 @@ const taskSlice = createSlice({
             });
         },
 
+        deleteTasks: (state, action: PayloadAction<string[]>) => {
+            const idsToDelete = new Set(action.payload);
+        
+            // Remove tasks from state.data
+            state.data = state.data.filter(task => !idsToDelete.has(task._id));
+        
+            // Remove tasks from state.unsyncedTasks
+            state.unsyncedTasks = state.unsyncedTasks.filter(task => !idsToDelete.has(task._id));
+        },
+
         clearSelecting: (state) => {
             state.selected.length = 0;
         },
@@ -112,6 +122,6 @@ export const getUnSyncedTasks = (state: RootState) => state.task.unsyncedTasks;
 //     tasks => tasks.filter(task => task.needsSync)
 // );
 
-export const { updateTasks, clearTasks, updateSelecting, clearSelecting, markTasksAsSynced } = taskSlice.actions;
+export const { updateTasks, clearTasks, updateSelecting, clearSelecting, markTasksAsSynced, deleteTasks } = taskSlice.actions;
 
 export default taskSlice.reducer;

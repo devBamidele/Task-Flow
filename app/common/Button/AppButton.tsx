@@ -93,13 +93,11 @@ const styles = StyleSheet.create({
     button: {
         flexDirection: 'row',
         justifyContent: "space-between",
-
         paddingVertical: mvs(8),
         paddingHorizontal: 16,
         backgroundColor: Colors.primary,
         borderRadius: 8,
         alignItems: "center",
-
         shadowColor: Colors.primary,
 
         //iOS
