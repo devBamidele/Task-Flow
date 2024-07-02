@@ -17,6 +17,7 @@ export interface Task extends BaseTask {
     _id: string,
     subtasks?: SubTask[],
     needsSync?: boolean,
+    visible?: boolean,
 }
 
 export interface SubTask {

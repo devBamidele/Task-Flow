@@ -4,11 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AddTaskButton, AppText, TaskTile } from '@/app/common';
 import { Colors, TodayScreenProps, weight, moderateScale } from '@/app/utils';
-import { getTasks, hasData, useGetAllQuery } from '@/app/redux/tasks';
+import { getTasks, hasData, useGetAllQuery, Task } from '@/app/redux/tasks';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { onlineState } from '@/app/redux/user/slice';
 import { ms, mvs } from 'react-native-size-matters';
-import { clearSelecting, isSelecting } from '@/app/redux/tasks/slice';
+import { clearSelecting, deleteTasks, isSelecting } from '@/app/redux/tasks/slice';
 import { useFocusEffect } from '@react-navigation/native';
 
 
@@ -25,6 +25,8 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
 
     const tasks = useAppSelector(getTasks);
     const hasCache = useAppSelector(hasData);
+
+    const [todos, setTodos] = useState(tasks);
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
@@ -48,6 +50,14 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
         }, [select])
     );
 
+    const onDismiss = useCallback((task: Task) => {
+
+        setTodos(prev => prev.filter(item => item._id !== task._id));
+
+        // setData(prevData => prevData.filter(item => item.id !== idToDelete));
+
+        dispatch(deleteTasks([task._id]));
+    }, [])
 
     return (
         <SafeAreaView style={styles.mainView}>
@@ -102,10 +112,16 @@ const TodayScreen: FC<TodayScreenProps> = ({ navigation, route }) => {
 
             <View style={styles.taskList}>
                 <FlatList
-                    data={tasks}
+                    data={todos}
                     keyExtractor={(task) => task._id}
                     renderItem={({ item, index }) => (
-                        <TaskTile item={item} index={index} navigation={navigation} route={route} />
+                        <TaskTile
+                            item={item}
+                            index={index}
+                            navigation={navigation}
+                            route={route}
+                            onDismiss={onDismiss}
+                        />
                     )}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

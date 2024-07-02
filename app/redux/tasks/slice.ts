@@ -71,10 +71,10 @@ const taskSlice = createSlice({
 
         deleteTasks: (state, action: PayloadAction<string[]>) => {
             const idsToDelete = new Set(action.payload);
-        
+
             // Remove tasks from state.data
             state.data = state.data.filter(task => !idsToDelete.has(task._id));
-        
+
             // Remove tasks from state.unsyncedTasks
             state.unsyncedTasks = state.unsyncedTasks.filter(task => !idsToDelete.has(task._id));
         },
